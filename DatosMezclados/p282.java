@@ -39,8 +39,7 @@ class Operador{
       procesarValoresCadena(valorCadena);
     }
 
-    cadenaFinal += cola.liberar();
-    cadenaFinal += pila.liberar();
+    liberarDatos();
 
     return cadenaFinal;
   }
@@ -62,7 +61,7 @@ class Operador{
     if( valorCadena.equalsIgnoreCase("PU") || valorCadena.equalsIgnoreCase("LL")){
       realizarInput(valorCadena);
     }
-    else{
+    else if( valorCadena.equalsIgnoreCase("PO") || valorCadena.equalsIgnoreCase("SA")){
       realizarOutput(valorCadena);
     }
   }
@@ -73,35 +72,43 @@ class Operador{
     if( accion.equalsIgnoreCase("PU")){
       pila.push(valorInput);
     }
-    else{
+    else if(accion.equalsIgnoreCase("LL")){
       cola.input(valorInput);
     }
 
-    System.out.println(" input de "+ valorInput +" realizado correctamente");
+    System.out.println(accion);
   }
 
   private void realizarOutput( String accion){
-    String valorOutput;
+    String valorOutput = "";
 
     if( accion.equalsIgnoreCase("PO")){
       valorOutput = pila.pop();
     }
-    else{
+    else if(accion.equalsIgnoreCase("SA")){
       valorOutput = cola.output();
     }
 
     cadenaFinal += formatearDatos(valorOutput);
     
-    System.out.println("'Se realizo output de'" + valorOutput);
+    System.out.println(accion);
+    // System.out.println("'Se realizo output de'" + valorOutput);
   }
 
   private String formatearDatos( String datoSalida ){
-    if( cadenaFinal.length() > 2){
-      return datoSalida + ",";
-    }
-    else{
+
+    if( cadenaFinal.length() == 0){
       return datoSalida;
     }
+    else{
+      return ( "," + datoSalida);
+    }
+    
+  }
+
+  private void liberarDatos(){
+    cadenaFinal += cola.liberar(cadenaFinal);
+    cadenaFinal += pila.liberar(cadenaFinal);
   }
   Operador(String cadena){
     cadenaFinal = "";
@@ -134,7 +141,8 @@ class Pila {
 
     public String pop(){
         if(!sePuedeOutput()){
-           return "##";
+            tope = null;
+            return "##";
         }
         else{
             nodoAux = tope;
@@ -149,18 +157,28 @@ class Pila {
         else{return true;}
     }
 
-    public String liberar(){
-      String datos = "";
+    public String liberar( String cadenaFinal){
+      String datoSalida, datos="";
       boolean sePuedePop = sePuedeOutput();
 
       while (sePuedePop) {
-        datos += pop();
+        datoSalida = pop();
+        System.out.println("se libero"+datoSalida);
+        datos += formatearDatos(datoSalida, cadenaFinal);
+        cadenaFinal += formatearDatos(datoSalida, cadenaFinal);
         sePuedePop = sePuedeOutput();
       }
-
       return datos;
     }
 
+    private String formatearDatos( String datoSalida, String cadenaFinal ){
+      if( cadenaFinal.length() == 0){
+        return datoSalida;
+      }
+      else{
+        return ( "," + datoSalida);
+      }
+    }
 
     Pila(){
         tope = null;
@@ -208,16 +226,27 @@ class Cola{
       else return true;
     }
 
-    public String liberar(){
-      String datos = "";
+    public String liberar(String cadenaFinal){
+      String datoSalida, datos="";
       boolean sePuedeOut = sePuedeOutput();
 
       while (sePuedeOut) {
-        datos += output();
+        datoSalida = output();
+        datos += formatearDatos(datoSalida, cadenaFinal);
+        cadenaFinal += formatearDatos(datoSalida, cadenaFinal);
         sePuedeOut = sePuedeOutput();
       }
 
       return datos;
+    }
+
+    private String formatearDatos( String datoSalida, String cadenaFinal ){
+      if( cadenaFinal.length() == 0){
+        return datoSalida;
+      }
+      else{
+        return ( "," + datoSalida);
+      }
     }
 
     Cola(){
