@@ -1,134 +1,145 @@
-class Pila {
-  private Nodo tope;
-    private Nodo nodoAux;
+import java.util.Scanner;
 
-    public void push(String dato){
-        Nodo nodoInput = new Nodo(dato);
+public class p272 {
+  public static void main(String[] args) {
+    Algoritmo[] algoritmos;
+    Algoritmo algoritmo, algoritmoEficiente = new Algoritmo(), algoritmoCosteado;
+    Scanner input = new Scanner(System.in);
+    String instrucciones;
+    Procesador procesador = new Procesador();
+    int casosPrueba, casosAlgoritmo;
+    int pruebasHechas, algoritmoHechos;
 
-        if(tope == null){
-            tope = nodoInput;
-        }
-        else{
-            nodoAux = tope;
-            tope = nodoInput;
-            tope.nodoSiguiente = nodoAux;
-        }
 
-        // System.out.println("Se inserto"+ nodoInput.dato);
-    }
+    casosPrueba = Integer.parseInt( input.nextLine() );
 
-    public String pop(){
-        if(!sePuedeOutput()){
-            tope = null;
-            return "##";
-        }
-        else{
-            nodoAux = tope;
-            tope = tope.nodoSiguiente;
-            return nodoAux.dato;
-        }
-    }
+    for ( pruebasHechas = 0; pruebasHechas < casosPrueba; pruebasHechas++) {
 
-    private boolean sePuedeOutput(){
-        
-        if(tope == null){ return false;}
-        else{return true;}
-    }
+      casosAlgoritmo = Integer.parseInt( input.nextLine() );
+      algoritmos = new Algoritmo[ casosAlgoritmo ];
 
-    public String liberar( String cadenaFinal){
-      String datoSalida, datos="";
-      boolean sePuedePop = sePuedeOutput();
+      for ( algoritmoHechos = 0; algoritmoHechos < casosAlgoritmo; algoritmoHechos++) {
+        instrucciones = input.nextLine();
+        algoritmo = new Algoritmo(instrucciones);
 
-      while (sePuedePop) {
-        datoSalida = pop();
-        System.out.println("se libero"+datoSalida);
-        datos += formatearDatos(datoSalida, cadenaFinal);
-        cadenaFinal += formatearDatos(datoSalida, cadenaFinal);
-        sePuedePop = sePuedeOutput();
+        algoritmoCosteado = procesador.procesarAlgoritmo(algoritmo, ( algoritmoHechos++));
+        algoritmos[algoritmoHechos] = algoritmoCosteado;
       }
-      return datos;
-    }
 
-    private String formatearDatos( String datoSalida, String cadenaFinal ){
-      if( cadenaFinal.length() == 0){
-        return datoSalida;
-      }
-      else{
-        return ( "," + datoSalida);
-      }
-    }
+      algoritmoEficiente = procesador.definirAlgoritmoEficiente(algoritmos);
 
-    Pila(){
-        tope = null;
-        nodoAux = null;
-    } 
+      System.out.println("Algoritmo "+algoritmoEficiente.index+" => "+algoritmoEficiente.costoAlgoritmo+" bytes");
+      
+
+    }
+    input.close();
+  }
 }
 
-class Cola{
-  private Nodo inicio;
-    private Nodo nodoAux;
+class Procesador{
+  private String[] arrayInstrucciones;
+  private int costoAlgoritmo;
+  Costos costoTipoDato;
 
-    public void input(String dato){
-        Nodo nodoInput = new Nodo(dato);
+  public Algoritmo procesarAlgoritmo( Algoritmo algoritmo, int index ){
+    
+    arrayInstrucciones = algoritmo.obtenerArreglo();
+    calcularCosto();
 
-        if(inicio == null){
-            inicio = nodoInput;
-        }
-        else{
-            buscarPosicion();
-            nodoAux.nodoSiguiente = nodoInput;
-        }
+    algoritmo.costoAlgoritmo = costoAlgoritmo;
+    algoritmo.totalInstrucciones = arrayInstrucciones.length;
+    algoritmo.index = index;
+    
+    return algoritmo;
+  }
+
+  private void calcularCosto(){
+    int index;
+
+    for ( index = 0; index < arrayInstrucciones.length; index++) {
+      sumarBytes( arrayInstrucciones[index]);
+    }
+  }
+
+  private void sumarBytes(String tipoDato){
+    if( tipoDato.equalsIgnoreCase("char") || tipoDato.equalsIgnoreCase("boolean") || tipoDato.equalsIgnoreCase("byte")){
+      costoAlgoritmo += costoTipoDato.caracterBoleanoByte;
+    }
+    else if( tipoDato.equalsIgnoreCase("int") || tipoDato.equalsIgnoreCase("float")){
+      costoAlgoritmo += costoTipoDato.enteroFlotante;
+    }
+    else if( tipoDato.equalsIgnoreCase("long") || tipoDato.equalsIgnoreCase("double")){
+      costoAlgoritmo += costoTipoDato.longDouble;
+    }
+    else{
+      costoAlgoritmo += costoTipoDato.string;
+    }    // }
+  }
+
+  public Algoritmo definirAlgoritmoEficiente( Algoritmo[] algoritmos ){
+    Algoritmo algoritmoEficiente = new Algoritmo(), algoritmoComparado = new Algoritmo();
+    int index;
+
+    for (index = 0; index < algoritmos.length; index++) {
+      algoritmoComparado = compararAlgoritmos(algoritmoEficiente, algoritmos[index]);
+      algoritmoEficiente.costoAlgoritmo = algoritmoComparado.costoAlgoritmo;
+      algoritmoEficiente.index = algoritmoComparado.index;
     }
 
-    private void buscarPosicion(){
-        nodoAux = inicio;
+    return algoritmoEficiente;
 
-        while(nodoAux.nodoSiguiente != null){
-            nodoAux = nodoAux.nodoSiguiente;
-        }
-    }
+  }
 
-    public String output(){
-        if( !sePuedeOutput() ){
-            return "$$";
-        }
-        else{
-            nodoAux = inicio;
-            inicio = inicio.nodoSiguiente;
-            return nodoAux.dato;
-        }
-    }
+  private Algoritmo compararAlgoritmos( Algoritmo algotimoEficiente, Algoritmo algoritmoComparar  ){
+    
+    if( algotimoEficiente.costoAlgoritmo < algoritmoComparar.costoAlgoritmo )
+      return algotimoEficiente;
+    else if( algoritmoComparar.costoAlgoritmo < algotimoEficiente.costoAlgoritmo)
+      return algoritmoComparar;
+    else
+      return compararTotalInstrucciones(algotimoEficiente, algoritmoComparar);
+  }
 
-    private boolean sePuedeOutput(){
-      if( inicio == null) return false;
-      else return true;
-    }
+  private Algoritmo compararTotalInstrucciones( Algoritmo algoritmoEficiente, Algoritmo algoritmoComparar){
+    if( algoritmoEficiente.totalInstrucciones < algoritmoComparar.totalInstrucciones)
+      return algoritmoEficiente;
+    else 
+      return algoritmoComparar;
+  }
 
-    public String liberar(String cadenaFinal){
-      String datoSalida, datos="";
-      boolean sePuedeOut = sePuedeOutput();
+  Procesador(){
+    costoTipoDato = new Costos();
+  }
+}
 
-      while (sePuedeOut) {
-        datoSalida = output();
-        datos += formatearDatos(datoSalida, cadenaFinal);
-        cadenaFinal += formatearDatos(datoSalida, cadenaFinal);
-        sePuedeOut = sePuedeOutput();
-      }
+class Algoritmo{
+  private String instrucciones;
+  public int costoAlgoritmo;
+  public int totalInstrucciones, index;
 
-      return datos;
-    }
+  public String[] obtenerArreglo(){
+    return instrucciones.split(",");
+  }
 
-    private String formatearDatos( String datoSalida, String cadenaFinal ){
-      if( cadenaFinal.length() == 0){
-        return datoSalida;
-      }
-      else{
-        return ( "," + datoSalida);
-      }
-    }
+  Algoritmo(String instrucciones){
+    this.instrucciones = instrucciones;
+    costoAlgoritmo = 0;
+    totalInstrucciones = 0;
+    index = 0;
+  }
 
-    Cola(){
-        inicio = null;
-        nodoAux = null;
-    }
+  Algoritmo(){
+    this.instrucciones = "";
+    costoAlgoritmo = 2000000;
+    totalInstrucciones = 0;
+    index = 0;
+  }
+}
+
+class Costos{
+  int string = 14;
+  int enteroFlotante = 4;
+  int longDouble = 8;
+  int caracterBoleanoByte = 1;
+
 }

@@ -3,30 +3,18 @@ import java.util.Scanner;
 public class p272 {
   public static void main(String[] args) {
     Algoritmo[] algoritmos;
-    Algoritmo algoritmo, algoritmoEficiente = new Algoritmo(), algoritmoCosteado;
+    Algoritmo algoritmo, algoritmoCosteado;
     Scanner input = new Scanner(System.in);
     String instrucciones;
     Procesador procesador = new Procesador();
-    int casosPrueba, casosAlgoritmo;
-    int pruebasHechas, algoritmoHechos;
+    int casosPrueba, index;
 
 
     casosPrueba = Integer.parseInt( input.nextLine() );
 
-    for ( pruebasHechas = 0; pruebasHechas < casosPrueba; pruebasHechas++) {
+    for ( index = 0; index < casosPrueba; index++) {
 
-      casosAlgoritmo = Integer.parseInt( input.nextLine() );
-      algoritmos = new Algoritmo[ casosAlgoritmo ];
-
-      for ( algoritmoHechos = 0; algoritmoHechos < casosAlgoritmo; algoritmoHechos++) {
-        instrucciones = input.nextLine();
-        algoritmo = new Algoritmo(instrucciones);
-
-        algoritmoCosteado = procesador.procesarAlgoritmo(algoritmo, ( algoritmoHechos++));
-        algoritmos[algoritmoHechos] = algoritmoCosteado;
-      }
-
-      algoritmoEficiente = procesador.definirAlgoritmoEficiente(algoritmos);
+      procesador.leerInstrucciones();
 
       System.out.println("Algoritmo "+algoritmoEficiente.index+" => "+algoritmoEficiente.costoAlgoritmo+" bytes");
       
@@ -37,43 +25,98 @@ public class p272 {
 }
 
 class Procesador{
-  private String[] arrayInstrucciones;
-  private int costoAlgoritmo;
+  private Algoritmo[] algoritmoEvaluados;
   Costos costoTipoDato;
 
-  public Algoritmo procesarAlgoritmo( Algoritmo algoritmo, int index ){
-    
-    arrayInstrucciones = algoritmo.obtenerArreglo();
-    calcularCosto();
+  public Algoritmo leerInstrucciones(){
+    Algoritmo[] algoritmosProcesados;
+    Scanner input = new Scanner(System.in);
+    String instrucciones;
+    int pruebasHechas, casosEvaluar;
 
-    algoritmo.costoAlgoritmo = costoAlgoritmo;
-    algoritmo.totalInstrucciones = arrayInstrucciones.length;
-    algoritmo.index = index;
-    
+    casosEvaluar = Integer.parseInt(input.nextLine());
+    algoritmosProcesados = new Algoritmo[casosEvaluar];
+
+    for ( pruebasHechas = 0; pruebasHechas < casosEvaluar; pruebasHechas++) {
+      instrucciones = input.nextLine();
+      procesarAlgoritmo(instrucciones, pruebasHechas);
+      
+
+    // arrayInstrucciones = algoritmo.obtenerArreglo();
+    // calcularCosto();
+
+    // algoritmo.costoAlgoritmo = costoAlgoritmo;
+    // algoritmo.totalInstrucciones = arrayInstrucciones.length;
+    // algoritmo.index = index;
+
+    input.close();
+
     return algoritmo;
   }
 
-  private void calcularCosto(){
-    int index;
+  private Algoritmo procesarAlgoritmo(String instrucciones, int index){
+    String[] arrayInstrucciones = instrucciones.split(",");
+    int costoAlgoritmo = calcularCosto(arrayInstrucciones);
+    int totalInstrucciones = calcularTotalInstrucciones(arrayInstrucciones);
 
-    for ( index = 0; index < arrayInstrucciones.length; index++) {
-      sumarBytes( arrayInstrucciones[index]);
-    }
+    Algoritmo algoritmoProcesado = new Algoritmo(index, costoAlgoritmo, totalInstrucciones );
+    return algoritmoProcesado;
+
   }
 
-  private void sumarBytes(String tipoDato){
-    if( tipoDato.equalsIgnoreCase("char") || tipoDato.equalsIgnoreCase("boolean") || tipoDato.equalsIgnoreCase("byte")){
-      costoAlgoritmo += costoTipoDato.caracterBoleanoByte;
+  private int calcularCosto(String[] arrayInstrucciones){
+    int index, costoAlgoritmo = 0;
+
+    for ( index = 0; index < arrayInstrucciones.length; index++) {
+      costoAlgoritmo = sumarBytes( arrayInstrucciones[index]);
     }
-    else if( tipoDato.equalsIgnoreCase("int") || tipoDato.equalsIgnoreCase("float")){
-      costoAlgoritmo += costoTipoDato.enteroFlotante;
+
+    return costoAlgoritmo;
+  }
+
+  private int calcularTotalInstrucciones( String[] instrucciones ){
+    return instrucciones.length;
+  }
+
+  private int sumarBytes(String tipoDato){
+    int costoAlgoritmo = 0;
+
+    // if( tipoDato.equalsIgnoreCase("char") || tipoDato.equalsIgnoreCase("boolean") || tipoDato.equalsIgnoreCase("byte")){
+    //   costoAlgoritmo += costoTipoDato.caracterBoleanoByte;
+    // }
+    // else if( tipoDato.equalsIgnoreCase("int") || tipoDato.equalsIgnoreCase("float")){
+    //   costoAlgoritmo += costoTipoDato.enteroFlotante;
+    // }
+    // else if( tipoDato.equalsIgnoreCase("long") || tipoDato.equalsIgnoreCase("double")){
+    //   costoAlgoritmo += costoTipoDato.longDouble;
+    // }
+    // else{
+    //   costoAlgoritmo += costoTipoDato.string;
+    // } 
+
+    switch (tipoDato) {
+      case "char":
+      case "boolean":
+      case "byte":
+        costoAlgoritmo += costoTipoDato.caracterBoleanoByte;
+        break;
+      case "int":
+      case "float":
+        costoAlgoritmo += costoTipoDato.enteroFlotante;
+        break;
+      case "long":
+      case "double":
+        costoAlgoritmo += costoTipoDato.longDouble;
+        break;
+      case "String":
+        costoAlgoritmo += costoTipoDato.string;
+        break;
+        
+        default:
+        break;
     }
-    else if( tipoDato.equalsIgnoreCase("long") || tipoDato.equalsIgnoreCase("double")){
-      costoAlgoritmo += costoTipoDato.longDouble;
-    }
-    else{
-      costoAlgoritmo += costoTipoDato.string;
-    }    // }
+    
+    return costoAlgoritmo;
   }
 
   public Algoritmo definirAlgoritmoEficiente( Algoritmo[] algoritmos ){
@@ -108,31 +151,26 @@ class Procesador{
   }
 
   Procesador(){
+    algoritmoEvaluados = new Algoritmo[0];
     costoTipoDato = new Costos();
   }
 }
 
 class Algoritmo{
-  private String instrucciones;
+  // private String instrucciones;
+  // private String[] arrayInstrucciones;
   public int costoAlgoritmo;
   public int totalInstrucciones, index;
 
-  public String[] obtenerArreglo(){
-    return instrucciones.split(",");
-  }
+  
 
-  Algoritmo(String instrucciones){
-    this.instrucciones = instrucciones;
-    costoAlgoritmo = 0;
-    totalInstrucciones = 0;
-    index = 0;
-  }
+  
 
-  Algoritmo(){
-    this.instrucciones = "";
-    costoAlgoritmo = 2000000;
-    totalInstrucciones = 0;
-    index = 0;
+  Algoritmo(int index, int costo, int totalInstrucciones){
+    // this.instrucciones = "";
+    costoAlgoritmo = costo;
+    this.totalInstrucciones = totalInstrucciones;
+    this.index = index;
   }
 }
 
