@@ -1,0 +1,134 @@
+class Pila {
+  private Nodo tope;
+    private Nodo nodoAux;
+
+    public void push(String dato){
+        Nodo nodoInput = new Nodo(dato);
+
+        if(tope == null){
+            tope = nodoInput;
+        }
+        else{
+            nodoAux = tope;
+            tope = nodoInput;
+            tope.nodoSiguiente = nodoAux;
+        }
+
+        // System.out.println("Se inserto"+ nodoInput.dato);
+    }
+
+    public String pop(){
+        if(!sePuedeOutput()){
+            tope = null;
+            return "##";
+        }
+        else{
+            nodoAux = tope;
+            tope = tope.nodoSiguiente;
+            return nodoAux.dato;
+        }
+    }
+
+    private boolean sePuedeOutput(){
+        
+        if(tope == null){ return false;}
+        else{return true;}
+    }
+
+    public String liberar( String cadenaFinal){
+      String datoSalida, datos="";
+      boolean sePuedePop = sePuedeOutput();
+
+      while (sePuedePop) {
+        datoSalida = pop();
+        System.out.println("se libero"+datoSalida);
+        datos += formatearDatos(datoSalida, cadenaFinal);
+        cadenaFinal += formatearDatos(datoSalida, cadenaFinal);
+        sePuedePop = sePuedeOutput();
+      }
+      return datos;
+    }
+
+    private String formatearDatos( String datoSalida, String cadenaFinal ){
+      if( cadenaFinal.length() == 0){
+        return datoSalida;
+      }
+      else{
+        return ( "," + datoSalida);
+      }
+    }
+
+    Pila(){
+        tope = null;
+        nodoAux = null;
+    } 
+}
+
+class Cola{
+  private Nodo inicio;
+    private Nodo nodoAux;
+
+    public void input(String dato){
+        Nodo nodoInput = new Nodo(dato);
+
+        if(inicio == null){
+            inicio = nodoInput;
+        }
+        else{
+            buscarPosicion();
+            nodoAux.nodoSiguiente = nodoInput;
+        }
+    }
+
+    private void buscarPosicion(){
+        nodoAux = inicio;
+
+        while(nodoAux.nodoSiguiente != null){
+            nodoAux = nodoAux.nodoSiguiente;
+        }
+    }
+
+    public String output(){
+        if( !sePuedeOutput() ){
+            return "$$";
+        }
+        else{
+            nodoAux = inicio;
+            inicio = inicio.nodoSiguiente;
+            return nodoAux.dato;
+        }
+    }
+
+    private boolean sePuedeOutput(){
+      if( inicio == null) return false;
+      else return true;
+    }
+
+    public String liberar(String cadenaFinal){
+      String datoSalida, datos="";
+      boolean sePuedeOut = sePuedeOutput();
+
+      while (sePuedeOut) {
+        datoSalida = output();
+        datos += formatearDatos(datoSalida, cadenaFinal);
+        cadenaFinal += formatearDatos(datoSalida, cadenaFinal);
+        sePuedeOut = sePuedeOutput();
+      }
+
+      return datos;
+    }
+
+    private String formatearDatos( String datoSalida, String cadenaFinal ){
+      if( cadenaFinal.length() == 0){
+        return datoSalida;
+      }
+      else{
+        return ( "," + datoSalida);
+      }
+    }
+
+    Cola(){
+        inicio = null;
+        nodoAux = null;
+    }
+}
