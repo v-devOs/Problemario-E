@@ -14,7 +14,7 @@ public class p282 {
       cadena = input.nextLine();
       operador = new Operador(cadena);
       
-      System.out.println("Cadena final: "+operador.procesarCadena());
+      System.out.println(operador.procesarCadena());
 
       caso++;
     }
@@ -53,7 +53,6 @@ class Operador{
       vuelta++;
       indexActual++;
     }
-    // System.out.println(valores);
     return valores;
   }
 
@@ -90,9 +89,6 @@ class Operador{
     }
 
     cadenaFinal += formatearDatos(valorOutput);
-    
-    System.out.println(accion);
-    // System.out.println("'Se realizo output de'" + valorOutput);
   }
 
   private String formatearDatos( String datoSalida ){
@@ -135,8 +131,6 @@ class Pila {
             tope = nodoInput;
             tope.nodoSiguiente = nodoAux;
         }
-
-        // System.out.println("Se inserto"+ nodoInput.dato);
     }
 
     public String pop(){
