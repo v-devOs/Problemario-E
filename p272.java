@@ -8,19 +8,20 @@ public class p272 {
 
     try (Scanner input = new Scanner(System.in)) {
       int casosPrueba, index, casosEvaluar, casosEvaluados;
-      casosPrueba = Integer.parseInt( input.nextLine() );
+      String instrucciones;
 
+      casosPrueba = Integer.parseInt( input.nextLine() );
       for ( index = 0; index < casosPrueba; index++) {
 
-        casosEvaluar = Integer.parseUnsignedInt( input.nextLine());
+        casosEvaluar = Integer.parseInt( input.nextLine());
         algoritmos = new Algoritmo[ casosEvaluar ];
 
         for ( casosEvaluados = 0; casosEvaluados < casosEvaluar; casosEvaluados++) {
-          algoritmoProcesado = procesador.leerProcesarInstrucciones( casosEvaluados, casosEvaluar );
+          instrucciones = input.nextLine();
+          algoritmoProcesado = procesador.leerProcesarInstrucciones( casosEvaluados, casosEvaluar, instrucciones );
           algoritmos[ casosEvaluados ] = algoritmoProcesado;
-          
         }
-        
+
         algoritmoEficiente = procesador.definirAlgoritmoEficiente(algoritmos);
 
         System.out.println("Algoritmo "+algoritmoEficiente.index+" => "+algoritmoEficiente.costoAlgoritmo+" bytes");
@@ -37,14 +38,11 @@ public class p272 {
 
 class Procesador{
   private Costos costoTipoDato;
-  private Scanner entrada = new Scanner(System.in);
 
 
-  public Algoritmo leerProcesarInstrucciones(int index, int casosEvaluar){
+  public Algoritmo leerProcesarInstrucciones(int index, int casosEvaluar, String instrucciones){
     Algoritmo algoritmoProcesado;
-    String instrucciones;
     
-    instrucciones = entrada.nextLine();
     algoritmoProcesado = procesarAlgoritmo(instrucciones, index);
     
     return algoritmoProcesado;
@@ -79,9 +77,11 @@ class Procesador{
 
     switch (tipoDato) {
       case "char":
+        costoAlgoritmo += costoTipoDato.caracter;
+        break;
       case "boolean":
       case "byte":
-        costoAlgoritmo += costoTipoDato.caracterBoleanoByte;
+        costoAlgoritmo += costoTipoDato.boleanoByte;
         break;
       case "int":
       case "float":
@@ -151,8 +151,9 @@ class Algoritmo{
 }
 
 class Costos{
-  int string = 14;
+  int string = 16;
   int enteroFlotante = 4;
   int longDouble = 8;
-  int caracterBoleanoByte = 1;
+  int boleanoByte = 1;
+  int caracter = 2;
 }
