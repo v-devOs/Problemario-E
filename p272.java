@@ -3,55 +3,51 @@ import java.util.Scanner;
 public class p272 {
   public static void main(String[] args) {
     Algoritmo[] algoritmos;
-    Algoritmo algoritmo, algoritmoCosteado;
-    Scanner input = new Scanner(System.in);
-    String instrucciones;
+    Algoritmo algoritmoEficiente, algoritmoProcesado;
     Procesador procesador = new Procesador();
-    int casosPrueba, index;
 
+    try (Scanner input = new Scanner(System.in)) {
+      int casosPrueba, index, casosEvaluar, casosEvaluados;
+      casosPrueba = Integer.parseInt( input.nextLine() );
 
-    casosPrueba = Integer.parseInt( input.nextLine() );
+      for ( index = 0; index < casosPrueba; index++) {
 
-    for ( index = 0; index < casosPrueba; index++) {
+        casosEvaluar = Integer.parseUnsignedInt( input.nextLine());
+        algoritmos = new Algoritmo[ casosEvaluar ];
 
-      procesador.leerInstrucciones();
+        for ( casosEvaluados = 0; casosEvaluados < casosEvaluar; casosEvaluados++) {
+          algoritmoProcesado = procesador.leerProcesarInstrucciones( casosEvaluados, casosEvaluar );
+          algoritmos[ casosEvaluados ] = algoritmoProcesado;
+          
+        }
+        
+        algoritmoEficiente = procesador.definirAlgoritmoEficiente(algoritmos);
 
-      System.out.println("Algoritmo "+algoritmoEficiente.index+" => "+algoritmoEficiente.costoAlgoritmo+" bytes");
-      
+        System.out.println("Algoritmo "+algoritmoEficiente.index+" => "+algoritmoEficiente.costoAlgoritmo+" bytes");
+        
+        
+      }
 
+      input.close();
+    } catch (NumberFormatException e) {
+      e.printStackTrace();
     }
-    input.close();
   }
 }
 
 class Procesador{
-  private Algoritmo[] algoritmoEvaluados;
-  Costos costoTipoDato;
+  private Costos costoTipoDato;
+  private Scanner entrada = new Scanner(System.in);
 
-  public Algoritmo leerInstrucciones(){
-    Algoritmo[] algoritmosProcesados;
-    Scanner input = new Scanner(System.in);
+
+  public Algoritmo leerProcesarInstrucciones(int index, int casosEvaluar){
+    Algoritmo algoritmoProcesado;
     String instrucciones;
-    int pruebasHechas, casosEvaluar;
-
-    casosEvaluar = Integer.parseInt(input.nextLine());
-    algoritmosProcesados = new Algoritmo[casosEvaluar];
-
-    for ( pruebasHechas = 0; pruebasHechas < casosEvaluar; pruebasHechas++) {
-      instrucciones = input.nextLine();
-      procesarAlgoritmo(instrucciones, pruebasHechas);
-      
-
-    // arrayInstrucciones = algoritmo.obtenerArreglo();
-    // calcularCosto();
-
-    // algoritmo.costoAlgoritmo = costoAlgoritmo;
-    // algoritmo.totalInstrucciones = arrayInstrucciones.length;
-    // algoritmo.index = index;
-
-    input.close();
-
-    return algoritmo;
+    
+    instrucciones = entrada.nextLine();
+    algoritmoProcesado = procesarAlgoritmo(instrucciones, index);
+    
+    return algoritmoProcesado;
   }
 
   private Algoritmo procesarAlgoritmo(String instrucciones, int index){
@@ -59,7 +55,7 @@ class Procesador{
     int costoAlgoritmo = calcularCosto(arrayInstrucciones);
     int totalInstrucciones = calcularTotalInstrucciones(arrayInstrucciones);
 
-    Algoritmo algoritmoProcesado = new Algoritmo(index, costoAlgoritmo, totalInstrucciones );
+    Algoritmo algoritmoProcesado = new Algoritmo((index+1), costoAlgoritmo, totalInstrucciones );
     return algoritmoProcesado;
 
   }
@@ -68,7 +64,7 @@ class Procesador{
     int index, costoAlgoritmo = 0;
 
     for ( index = 0; index < arrayInstrucciones.length; index++) {
-      costoAlgoritmo = sumarBytes( arrayInstrucciones[index]);
+      costoAlgoritmo += sumarBytes( arrayInstrucciones[index]);
     }
 
     return costoAlgoritmo;
@@ -80,19 +76,6 @@ class Procesador{
 
   private int sumarBytes(String tipoDato){
     int costoAlgoritmo = 0;
-
-    // if( tipoDato.equalsIgnoreCase("char") || tipoDato.equalsIgnoreCase("boolean") || tipoDato.equalsIgnoreCase("byte")){
-    //   costoAlgoritmo += costoTipoDato.caracterBoleanoByte;
-    // }
-    // else if( tipoDato.equalsIgnoreCase("int") || tipoDato.equalsIgnoreCase("float")){
-    //   costoAlgoritmo += costoTipoDato.enteroFlotante;
-    // }
-    // else if( tipoDato.equalsIgnoreCase("long") || tipoDato.equalsIgnoreCase("double")){
-    //   costoAlgoritmo += costoTipoDato.longDouble;
-    // }
-    // else{
-    //   costoAlgoritmo += costoTipoDato.string;
-    // } 
 
     switch (tipoDato) {
       case "char":
@@ -120,17 +103,17 @@ class Procesador{
   }
 
   public Algoritmo definirAlgoritmoEficiente( Algoritmo[] algoritmos ){
-    Algoritmo algoritmoEficiente = new Algoritmo(), algoritmoComparado = new Algoritmo();
+    Algoritmo algoritmoEficiente = new Algoritmo();
     int index;
 
     for (index = 0; index < algoritmos.length; index++) {
-      algoritmoComparado = compararAlgoritmos(algoritmoEficiente, algoritmos[index]);
-      algoritmoEficiente.costoAlgoritmo = algoritmoComparado.costoAlgoritmo;
-      algoritmoEficiente.index = algoritmoComparado.index;
+      if( index == 0 ) 
+        algoritmoEficiente = algoritmos[index];
+      else
+        algoritmoEficiente = compararAlgoritmos(algoritmoEficiente, algoritmos[index]);
     }
 
     return algoritmoEficiente;
-
   }
 
   private Algoritmo compararAlgoritmos( Algoritmo algotimoEficiente, Algoritmo algoritmoComparar  ){
@@ -151,27 +134,20 @@ class Procesador{
   }
 
   Procesador(){
-    algoritmoEvaluados = new Algoritmo[0];
     costoTipoDato = new Costos();
   }
 }
 
 class Algoritmo{
-  // private String instrucciones;
-  // private String[] arrayInstrucciones;
   public int costoAlgoritmo;
   public int totalInstrucciones, index;
 
-  
-
-  
-
   Algoritmo(int index, int costo, int totalInstrucciones){
-    // this.instrucciones = "";
     costoAlgoritmo = costo;
     this.totalInstrucciones = totalInstrucciones;
     this.index = index;
   }
+  Algoritmo(){}
 }
 
 class Costos{
@@ -179,5 +155,4 @@ class Costos{
   int enteroFlotante = 4;
   int longDouble = 8;
   int caracterBoleanoByte = 1;
-
 }
