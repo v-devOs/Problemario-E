@@ -7,12 +7,12 @@ public class Tarea {
     Controlador controlador = new Controlador();
 
     controlador.actualizarArchivo();
-    File doc = new File("Numeros.txt");
-    File doc2 = new File("Actulizacion.txt");
 
-
-    doc.delete();
-    doc2.renameTo( new File("Numeros.txt"));
+    File numeros = new File("Numeros.txt");
+    File actualizacio = new File("Actualizacion.txt");
+    numeros.delete();
+    actualizacio.renameTo( new File("Numeros.txt"));
+   
   }
 }
 
@@ -48,9 +48,8 @@ class Controlador{
         }
       }
 
-      numeros.delete();
-
       input.close();
+      file.close();
       escritor.close();
       
     } catch (Exception e) {
@@ -58,21 +57,7 @@ class Controlador{
     }
   }
 
-  private void borrarArchivoViejo(){
-    try {
-      File numeros = new File("Numeros.txt");
-      numeros.delete();
-    } catch (Exception e) {
-      System.out.println("No se pudo borrar archivo");
-    }
-  }
-
-  private void renombrarArchivo(){
-    File oldFile = new File("Actulizacion.txt");
-    File newFile = new File("Numeros.txt"); 
-
-    oldFile.renameTo(newFile);
-  }
+  
 
  
   
