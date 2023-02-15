@@ -1,44 +1,45 @@
+
 public class p293{
   public static void main(String[] args) {
-    
+    String prueba = "REMOVE 30";
+
+    System.out.println( prueba.startsWith("REMOVE"));
   }
 }
 
 
 
 class Hibrido{
-  Nodo start, nodoAux;
+  Nodo start, nodoAux, end;
   String datosSalida;
 
-  public void controlDatos( String operacion, int datoInsertar ){
-    switch (operacion) {
-      case "POP":
+  public void controlDatos( String operacion, int valor ){    
+
+    switch ( operacion ) {
+      case "PUSH":
       case "IN":
       case "INSERT":
-        agregarDato(operacion, datoInsertar); break;
-      case "PUSH":
+        agregarDato(operacion, valor); break;
+      case "POP":
       case "OUT":
       case "REMOVE":
-        removerDato(operacion); break;
+        removerDato(operacion, valor); break;
       default:
         break;
     }
-
   }
 
   private void agregarDato( String operacion, int datoInsertar ){
     Nodo nodoInsertar = new Nodo(datoInsertar);
 
-    if( start == null ) start = nodoInsertar;
-    else if( operacion.equals("PUSH")) push( nodoInsertar );
-    else if( operacion.equals("IN")) in( nodoInsertar );
-    else insert( nodoInsertar );
-  }
-
-  private void removerDato( String operacion ){
-    if( operacion.equals("PUSH")) pop();
-    else if( operacion.equals("IN")) out();
-    else remove();
+    if( start == null ) 
+      start = end = nodoInsertar;
+    else if( operacion.equals("PUSH")) 
+      push( nodoInsertar );
+    else if( operacion.equals("IN")) 
+      in( nodoInsertar );
+    else 
+      insert( nodoInsertar );
   }
 
   private void push( Nodo nodoInsertar ){
@@ -47,8 +48,9 @@ class Hibrido{
     nodoInsertar.nodoSiguiente = nodoAux;
   }
   private void in( Nodo nodoInsertar ){
-    buscarPosicion();
-    nodoAux.nodoSiguiente = nodoInsertar;
+    nodoAux = nodoInsertar;
+    end.nodoSiguiente = nodoAux;
+    end = nodoAux;
   }
   private void insert( Nodo nodoInsertar ){
     Nodo nodoIntercambio;
@@ -58,6 +60,10 @@ class Hibrido{
       start = nodoInsertar;
       start.nodoSiguiente = nodoAux;
     }
+    else if( end.valor < nodoInsertar.valor){
+      end.nodoSiguiente = nodoInsertar;
+      end = end.nodoSiguiente;
+    }
     else{
       buscarPosicion(nodoInsertar.valor);
       nodoIntercambio = nodoAux.nodoSiguiente;
@@ -66,37 +72,75 @@ class Hibrido{
     }
   }
 
-  private void buscarPosicion(){
-    nodoAux = start;
-    while (nodoAux.nodoSiguiente != null) {
-      nodoAux = nodoAux.nodoSiguiente;
-    }
-  }
-
   private void buscarPosicion( int valorInsertar ){
     nodoAux = start;
     while ( nodoAux.nodoSiguiente != null && nodoAux.nodoSiguiente.valor < valorInsertar ) {
       nodoAux = nodoAux.nodoSiguiente;
+    } 
+  }
+
+  private void removerDato( String operacion, int valorRemove ){
+    if( start == null && end == null ) controlUnderflow(operacion);
+    else controlSalidaDatos(operacion, valorRemove);
+  }
+
+  private void controlUnderflow( String operacion ){
+    String valorSalida;
+
+    switch (operacion) {
+      case "OUT":
+      case "POP":
+        valorSalida = "UNDERFLOW";
+        break;
+      default:
+        valorSalida = "NO DATA";
+        break;
     }
-    
+    datosSalida += aplicarFormato(valorSalida);
+  }
+
+  private void controlSalidaDatos( String operacion, int valorRemove ){
+    switch (operacion) {
+      case "POP":
+        pop();
+        break;
+      case "OUT":
+        out();
+        break;
+      default:
+        // remove( operacion );
+        break;
+    }
   }
 
   private void pop(){
     String valorSalida;
     
-    if( start == null ){
-      valorSalida = "UNDERFLOW";
-    }
-    else{
-      nodoAux = start;
-      start = start.nodoSiguiente;
-      valorSalida = String.valueOf( nodoAux.valor );
-    }
-
+    nodoAux = start;
+    start = start.nodoSiguiente;
+    valorSalida = String.valueOf( nodoAux.valor );
+    
     datosSalida += aplicarFormato(valorSalida);
   }
-  private void out(){}
-  private void remove(){}
+  private void out(){
+    String valorSalida;
+
+    nodoAux = start;
+    start = start.nodoSiguiente;
+    valorSalida = String.valueOf(nodoAux.valor);
+
+    datosSalida += aplicarFormato(valorSalida);
+   
+  }
+  private void remove( int valorRemove ){
+    if( start.valor == valorRemove ){
+      nodoAux = start;
+      start = start.nodoSiguiente;
+    }
+    else{
+      
+    }
+  }
 
   private String aplicarFormato( String valorSalida ){
     return (datosSalida.length() == 0)
@@ -108,6 +152,7 @@ class Hibrido{
     datosSalida = "";
     start = null;
     nodoAux = null;
+    end = null;
   }
 }
 
