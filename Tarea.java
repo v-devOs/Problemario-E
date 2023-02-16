@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Tarea {
   public static void main(String[] args) {
-    Controlador controlador = new Controlador();
+    ControladorSecuencial controlador = new ControladorSecuencial();
 
     controlador.actualizarArchivo();
 
@@ -17,7 +17,7 @@ public class Tarea {
 }
 
 
-class Controlador{
+class ControladorSecuencial{
   
 
   public void actualizarArchivo(){
