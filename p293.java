@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class p293{
   public static void main(String[] args) {
-    Hibrido hibrido = new Hibrido();
+    ControladorHibrido ctrlHibrido = new ControladorHibrido();
     try (Scanner input = new Scanner(System.in)) {
       String instruccion = "";
       int casosPrueba, casosHechos;
@@ -13,6 +13,7 @@ public class p293{
         
         while ( !instruccion.equals("FINISH") ) {
           instruccion = input.nextLine();
+          ctrlHibrido.procesarInstruccion(instruccion);
         }
         instruccion = "";
       }
@@ -26,25 +27,53 @@ public class p293{
 
 class ControladorHibrido{
   public void procesarInstruccion(String instruccion){
-    String[] instruccionSeparada = separarInstruccion(instruccion);
+    analizarInstruccion(instruccion);
   }
 
   private String[] separarInstruccion( String instruccion){
     return instruccion.split(" ");
   }
 
-  private void aInstruccion( String[] instruccionSeparada ){
+  private void analizarInstruccion( String instruccion ){
+    String[] instruccionSeparada = separarInstruccion(instruccion);
     String instruccionEstructura;
-    int valor;
+    int valor = 0;
 
     if( instruccionSeparada.length > 1){
       instruccionEstructura = instruccionSeparada[0];
       valor = Integer.parseInt(instruccionSeparada[1]);
     }
+    else
+      instruccionEstructura = instruccionSeparada[0];
     
-    instruccionEstructura = instruccionSeparada[0];
+    determinarEjecutarInstruccion(instruccionEstructura, valor);
+    
+  }
+
+  private void determinarEjecutarInstruccion( String instruccionEstructura, int valor ){
+    // System.out.println(instruccionEstructura + " llegue hasta determinar " + valor);
+    switch (instruccionEstructura) {
+      case "PUSH":
+      case "IN":
+      case "INSERT":
+      
+        break;
+      case "POP":
+      case "OUT":
+      case "REMOVE":
+        realizarSalida(instruccionEstructura, valor);
+      default:
+        break;
+    }
+  }
+
+  private String realizarSalida( String instruccion, int valor ){
+    
+    return "";
   }
 }
+
+
 
 class Hibrido{
   Nodo start, end, nodoAux;
