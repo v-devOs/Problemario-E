@@ -26,6 +26,8 @@ public class p293{
 }
 
 class ControladorHibrido{
+  String cadenaFinal;
+
   public void procesarInstruccion(String instruccion){
     analizarInstruccion(instruccion);
   }
@@ -56,20 +58,24 @@ class ControladorHibrido{
       case "PUSH":
       case "IN":
       case "INSERT":
-      
+        realizarEntrada(instruccionEstructura, valor);
+
         break;
       case "POP":
       case "OUT":
       case "REMOVE":
-        realizarSalida(instruccionEstructura, valor);
       default:
         break;
     }
   }
 
-  private String realizarSalida( String instruccion, int valor ){
+  private String realizarEntrada( String instruccion, int valor ){
     
     return "";
+  }
+
+  ControladorHibrido(){
+    cadenaFinal = "";
   }
 }
 
@@ -77,11 +83,80 @@ class ControladorHibrido{
 
 class Hibrido{
   Nodo start, end, nodoAux;
-  String cadenaFinal;
 
+  public void controlEntrada( String instruccion, int valor ){
+    Nodo nodoEntrada = new Nodo(valor);
+
+    if( start == null ) 
+      end = start = nodoEntrada;
+    else
+      ejecutarEntrada(instruccion, nodoEntrada);
+  }
+
+  private void ejecutarEntrada( String instruccion, Nodo nodoEntrada ){
+    switch (instruccion) {
+      case "PUSH":
+        push(nodoEntrada);
+        break;
+      case "IN":
+        in(nodoEntrada);
+        break;
+      case "INSERT":
+        insert(nodoEntrada);
+        break;    
+      default:
+        break;
+    }
+  }
+
+private void push( Nodo nodoEntrada ){
+  nodoAux = start;
+  start = nodoEntrada;
+  start.nodoSiguiente = nodoAux;
+
+  System.out.println(start.valor + " entrada en modo pila");
+}
+private void in( Nodo nodoEntrada ){
+  end.nodoSiguiente = nodoEntrada;
+  end = end.nodoSiguiente;
+
+  System.out.println(end.valor + " entrada en modo cola");
+}
+private void insert( Nodo nodoEntrada ){
+  Nodo nodoAuxIntercambio;
+
+  if( start.valor > nodoEntrada.valor ){
+    nodoAux = start;
+    start = nodoEntrada;
+    start.nodoSiguiente = nodoEntrada;
+    System.out.println(end.valor + " entrada en modo lista inicio");
+
+  }
+  else if( end.valor < nodoEntrada.valor ){
+    end.nodoSiguiente = nodoEntrada;
+    end = end.nodoSiguiente;
+    System.out.println(end.valor + " entrada en modo lista final");
+
+  }
+  else{
+    buscarPoscicion(nodoEntrada.valor);
+    nodoAuxIntercambio = nodoAux.nodoSiguiente;
+    nodoAux.nodoSiguiente = nodoEntrada;
+    nodoAuxIntercambio.nodoSiguiente.nodoSiguiente = nodoAuxIntercambio;
+    System.out.println(end.valor + " entrada en modo lista medio");
+
+  }
+
+}
+private void buscarPoscicion( int valor ){
+  nodoAux = start;
+
+  while (nodoAux.nodoSiguiente != null && nodoAux.nodoSiguiente.valor < valor) {
+    nodoAux = nodoAux.nodoSiguiente;
+  }
+}
   
   Hibrido(){
-    cadenaFinal = "";
     start = null;
     nodoAux = null;
     end = null;
