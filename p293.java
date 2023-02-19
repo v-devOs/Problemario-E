@@ -26,7 +26,8 @@ public class p293{
 }
 
 class ControladorHibrido{
-  String cadenaFinal;
+  private Hibrido hibrido;
+  private String cadenaFinal;
 
   public void procesarInstruccion(String instruccion){
     analizarInstruccion(instruccion);
@@ -59,7 +60,6 @@ class ControladorHibrido{
       case "IN":
       case "INSERT":
         realizarEntrada(instruccionEstructura, valor);
-
         break;
       case "POP":
       case "OUT":
@@ -70,12 +70,13 @@ class ControladorHibrido{
   }
 
   private String realizarEntrada( String instruccion, int valor ){
-    
+    hibrido.controlEntrada(instruccion, valor);
     return "";
   }
 
   ControladorHibrido(){
     cadenaFinal = "";
+    hibrido = new Hibrido();
   }
 }
 
@@ -85,12 +86,17 @@ class Hibrido{
   Nodo start, end, nodoAux;
 
   public void controlEntrada( String instruccion, int valor ){
+
+    // System.out.println("Llegue hasta control entrada");
     Nodo nodoEntrada = new Nodo(valor);
 
-    if( start == null ) 
-      end = start = nodoEntrada;
+    if( start == null ) {
+      // System.out.println("Inserte en el inicio");
+
+      end = start = nodoEntrada;}
     else
       ejecutarEntrada(instruccion, nodoEntrada);
+
   }
 
   private void ejecutarEntrada( String instruccion, Nodo nodoEntrada ){
@@ -114,13 +120,13 @@ private void push( Nodo nodoEntrada ){
   start = nodoEntrada;
   start.nodoSiguiente = nodoAux;
 
-  System.out.println(start.valor + " entrada en modo pila");
+  // System.out.println(start.valor + " entrada en modo pila");
 }
 private void in( Nodo nodoEntrada ){
   end.nodoSiguiente = nodoEntrada;
   end = end.nodoSiguiente;
 
-  System.out.println(end.valor + " entrada en modo cola");
+  // System.out.println(end.valor + " entrada en modo cola");
 }
 private void insert( Nodo nodoEntrada ){
   Nodo nodoAuxIntercambio;
@@ -129,26 +135,28 @@ private void insert( Nodo nodoEntrada ){
     nodoAux = start;
     start = nodoEntrada;
     start.nodoSiguiente = nodoEntrada;
-    System.out.println(end.valor + " entrada en modo lista inicio");
+    // System.out.println(start.valor + " entrada en modo lista inicio");
 
   }
   else if( end.valor < nodoEntrada.valor ){
     end.nodoSiguiente = nodoEntrada;
     end = end.nodoSiguiente;
-    System.out.println(end.valor + " entrada en modo lista final");
+    // System.out.println(end.valor + " entrada en modo lista final");
 
   }
   else{
+  
     buscarPoscicion(nodoEntrada.valor);
     nodoAuxIntercambio = nodoAux.nodoSiguiente;
     nodoAux.nodoSiguiente = nodoEntrada;
-    nodoAuxIntercambio.nodoSiguiente.nodoSiguiente = nodoAuxIntercambio;
-    System.out.println(end.valor + " entrada en modo lista medio");
+    nodoAux.nodoSiguiente.nodoSiguiente = nodoAuxIntercambio;
+    // System.out.println(end.valor + " entrada en modo lista medio");
 
   }
 
 }
 private void buscarPoscicion( int valor ){
+  System.out.println("Entre al buscador");
   nodoAux = start;
 
   while (nodoAux.nodoSiguiente != null && nodoAux.nodoSiguiente.valor < valor) {
