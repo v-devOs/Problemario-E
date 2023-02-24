@@ -18,10 +18,6 @@ public class p293{
         instruccion = "";
       }
 
-      ctrlHibrido.mostar();
-
-      
-
       input.close();
     } catch (NumberFormatException e) {
       
@@ -35,11 +31,6 @@ class ControladorHibrido{
 
   public void procesarInstruccion(String instruccion){
     analizarInstruccion(instruccion);
-  }
-
-  public void mostar(){
-
-    hibrido.mostar();
   }
 
   private void analizarInstruccion( String instruccion ){
@@ -63,7 +54,6 @@ class ControladorHibrido{
   }
 
   private void determinarEjecutarInstruccion( String instruccionEstructura, int valor ){
-    // System.out.println(instruccionEstructura + " llegue hasta determinar " + valor);
     switch (instruccionEstructura) {
       case "PUSH":
       case "IN":
@@ -74,6 +64,11 @@ class ControladorHibrido{
       case "OUT":
       case "REMOVE":
         realizarSalida(instruccionEstructura, valor);
+        break;
+      case "FINISH":
+        cadenaFinal += aplicarFormato("****");
+        System.out.println(cadenaFinal);
+        break;
       default:
         break;
     }
@@ -85,14 +80,12 @@ class ControladorHibrido{
 
   private void realizarSalida( String instruccion, int valor ){
     String valorSalida = hibrido.controlSalida(instruccion, valor);
-    System.out.println(valorSalida);
     cadenaFinal += aplicarFormato(valorSalida);
   }
 
   private String aplicarFormato( String valorSalda ){
     return ( cadenaFinal.length() == 0) ? valorSalda : "," + valorSalda;
   }
-
 
   ControladorHibrido(){
     cadenaFinal = "";
@@ -228,17 +221,8 @@ class Hibrido{
   }
 
   
-
-  public void mostar(){
-
-    nodoAux = start;
-
-    System.out.println(nodoAux.valor);
-
-    while (nodoAux.nodoSiguiente != null) {
-      nodoAux = nodoAux.nodoSiguiente;
-      System.out.println(nodoAux.valor);
-    }
+  private String finalizarProceso(){
+    return "****";
   }
   
   Hibrido(){
