@@ -73,15 +73,26 @@ class ControladorHibrido{
       case "POP":
       case "OUT":
       case "REMOVE":
+        realizarSalida(instruccionEstructura, valor);
       default:
         break;
     }
   }
 
-  private String realizarEntrada( String instruccion, int valor ){
+  private void realizarEntrada( String instruccion, int valor ){
     hibrido.controlEntrada(instruccion, valor);
-    return "";
   }
+
+  private void realizarSalida( String instruccion, int valor ){
+    String valorSalida = hibrido.controlSalida(instruccion, valor);
+    System.out.println(valorSalida);
+    cadenaFinal += aplicarFormato(valorSalida);
+  }
+
+  private String aplicarFormato( String valorSalda ){
+    return ( cadenaFinal.length() == 0) ? valorSalda : "," + valorSalda;
+  }
+
 
   ControladorHibrido(){
     cadenaFinal = "";
@@ -99,7 +110,6 @@ class Hibrido{
       start = nodoEntrada;
     else
       ejecutarEntrada(instruccion, nodoEntrada);
-
   }
 
   private void ejecutarEntrada( String instruccion, Nodo nodoEntrada ){
@@ -157,6 +167,67 @@ class Hibrido{
       nodoAux = nodoAux.nodoSiguiente;
     }
   }
+
+  public String controlSalida( String instruccion, int valor ){
+    if( start == null )
+      return determinarTipoUnderFlow(instruccion);
+    else
+      return realizarSalida(instruccion, valor);
+  }
+
+  private String determinarTipoUnderFlow( String instruccion ){
+    switch (instruccion) {
+      case "POP":
+      case "OUT":
+        return "UNDERFLOW";
+      case "REMOVE":
+        return "NO DATA";
+      default:
+        return "";
+    }
+  }
+
+  private String realizarSalida( String instruccion, int valor ){
+    switch (instruccion) {
+      case "POP":
+      case "OUT":
+        return popOutAndRemoveStart();
+      case "REMOVE":
+        return remove(valor);
+      default:
+        return "";
+    }
+  }
+
+  private String popOutAndRemoveStart(){
+    nodoAux = start;
+    start = start.nodoSiguiente;
+    return String.valueOf(nodoAux.valor);
+  }
+
+  private String remove( int valor ){
+    if( start.valor == valor )
+      return popOutAndRemoveStart();
+    else{
+      buscarPoscicion(valor);
+      return compararRemover(valor);
+    }
+  }
+
+  private String compararRemover( int valor ){
+    Nodo nodoSalida;
+
+    if( nodoAux.nodoSiguiente.valor == valor ){
+      nodoSalida = nodoAux.nodoSiguiente;
+      nodoAux.nodoSiguiente = nodoAux.nodoSiguiente.nodoSiguiente;
+      
+      return String.valueOf(nodoSalida.valor);
+    }
+    else
+      return "NO DATA";
+  }
+
+  
 
   public void mostar(){
 
