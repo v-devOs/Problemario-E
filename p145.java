@@ -32,7 +32,19 @@ class Buscador{
   int limitInfe, limitSup, datoBuscar;
   
   public int buscarDato(){
+    return control();
+     
+  }
 
+  private int control(){
+    if(limitInfe < 0 && limitSup < 0)
+      return buscarDatoLimitesNegativos();
+    else
+      return buscarDatoLimitesPositivos();
+    
+  }
+
+  private int buscarDatoLimitesPositivos(){
     hacerPositivo();
     cambiarLimites();
   
@@ -53,11 +65,40 @@ class Buscador{
     }
 
     return ( limitSup == datoBuscar ) ? comparaciones : -1;
-     
+  }
+
+  private int buscarDatoLimitesNegativos(){
+    int puntoMedio = (limitSup+limitInfe)/2, comparaciones = 0, contador = 0, puntoMedioAnterior;
+    boolean seCliclo = false;
+
+    while (!seCliclo && limitInfe < limitSup) {
+      if( puntoMedio > datoBuscar ){
+        comparaciones++;
+        limitSup = --puntoMedio;
+      }
+      else{
+        comparaciones++;
+        limitInfe = puntoMedio;
+      }
+
+      puntoMedioAnterior = puntoMedio;
+      puntoMedio = (limitSup + limitInfe)/2;
+
+      if( puntoMedioAnterior == puntoMedio ) seCliclo = true;
+      // if( contador > 10) seCliclo = true;
+
+    }
+
+    // System.out.println(" Sali del cliclo, punto medio:" + puntoMedio);
+    if( seCliclo ) System.out.println("Me cicle");
+
+    return( limitSup == datoBuscar) ? ++comparaciones: -1;
+    
+    
   }
 
   private void hacerPositivo(){
-    if( limitInfe < 0 && limitSup > 0) limitInfe *= 1;
+    if( limitInfe < 0 && limitSup > 0) limitInfe *= -1;
     if( limitInfe < 0 && limitSup < 0  ) limitInfe *= -1;
     if( limitSup < 0 ) limitSup *= -1;
     if( datoBuscar < 0 ) datoBuscar *= -1;
