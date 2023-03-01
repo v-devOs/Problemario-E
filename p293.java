@@ -124,7 +124,8 @@ class Hibrido{
   private void pushIn( Nodo nodoEntrada ){
     start.nodoSiguiente = nodoEntrada;
     tope = start.nodoSiguiente;
-    
+
+    System.out.println( start.valor + " " + tope.valor);
   }
   
   private void insert( Nodo nodoEntrada ){
@@ -134,6 +135,11 @@ class Hibrido{
       nodoAux = start;
       start = nodoEntrada;
       start.nodoSiguiente = nodoAux;
+
+    }
+    else if( tope.valor < nodoEntrada.valor ){
+      tope.nodoSiguiente = nodoEntrada;
+      tope = tope.nodoSiguiente;
     }
     else{
       buscarPoscicion(nodoEntrada.valor);
@@ -141,14 +147,10 @@ class Hibrido{
       nodoAux.nodoSiguiente = nodoEntrada;
       nodoAux.nodoSiguiente.nodoSiguiente = nodoAuxIntercambio;
     }
-  }
-  // private void buscarPoscicion(){
-  //   nodoAux = start;
+    System.out.println( start.valor + " " + tope.valor);
 
-  //   while (nodoAux.nodoSiguiente != null) {
-  //     nodoAux = nodoAux.nodoSiguiente;
-  //   }
-  // }
+  }
+ 
   private void buscarPoscicion( int valor ){
     System.out.println("Entre al buscador");
     nodoAux = start;
@@ -222,6 +224,7 @@ class Hibrido{
   Hibrido(){
     start = null;
     nodoAux = null;
+    tope = null;
   }
 }
 
