@@ -68,7 +68,7 @@ class Buscador{
   }
 
   private int buscarDatoLimitesNegativos(){
-    int puntoMedio = (limitSup+limitInfe)/2, comparaciones = 0, contador = 0, puntoMedioAnterior;
+    int puntoMedio = (limitSup+limitInfe)/2, comparaciones = 0, puntoMedioAnterior;
     boolean seCliclo = false;
 
     while (!seCliclo && limitInfe < limitSup) {

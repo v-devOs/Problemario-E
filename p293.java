@@ -15,6 +15,8 @@ public class p293{
           instruccion = input.nextLine();
           ctrlHibrido.procesarInstruccion(instruccion);
         }
+
+        System.out.println(ctrlHibrido.cadenaFinal);
         instruccion = "";
       }
 
@@ -27,7 +29,7 @@ public class p293{
 
 class ControladorHibrido{
   private Hibrido hibrido;
-  private String cadenaFinal;
+  public String cadenaFinal;
 
   public void procesarInstruccion(String instruccion){
     analizarInstruccion(instruccion);
@@ -67,7 +69,6 @@ class ControladorHibrido{
         break;
       case "FINISH":
         cadenaFinal += aplicarFormato("****");
-        System.out.println(cadenaFinal);
         break;
       default:
         break;
@@ -94,13 +95,14 @@ class ControladorHibrido{
 }
 
 class Hibrido{
-  Nodo start, nodoAux;
+  Nodo start, tope, nodoAux;
+  
 
   public void controlEntrada( String instruccion, int valor ){
     Nodo nodoEntrada = new Nodo(valor);
 
     if( start == null ) 
-      start = nodoEntrada;
+      start = tope = nodoEntrada;
     else
       ejecutarEntrada(instruccion, nodoEntrada);
   }
@@ -108,10 +110,8 @@ class Hibrido{
   private void ejecutarEntrada( String instruccion, Nodo nodoEntrada ){
     switch (instruccion) {
       case "PUSH":
-        push(nodoEntrada);
-        break;
       case "IN":
-        in(nodoEntrada);
+        pushIn(nodoEntrada);
         break;
       case "INSERT":
         insert(nodoEntrada);
@@ -121,15 +121,12 @@ class Hibrido{
     }
   }
 
-  private void push( Nodo nodoEntrada ){
-    nodoAux = start;
-    start = nodoEntrada;
-    start.nodoSiguiente = nodoAux;
+  private void pushIn( Nodo nodoEntrada ){
+    start.nodoSiguiente = nodoEntrada;
+    tope = start.nodoSiguiente;
+    
   }
-  private void in( Nodo nodoEntrada ){
-    buscarPoscicion();
-    nodoAux.nodoSiguiente = nodoEntrada;
-  }
+  
   private void insert( Nodo nodoEntrada ){
     Nodo nodoAuxIntercambio;
 
@@ -145,13 +142,13 @@ class Hibrido{
       nodoAux.nodoSiguiente.nodoSiguiente = nodoAuxIntercambio;
     }
   }
-  private void buscarPoscicion(){
-    nodoAux = start;
+  // private void buscarPoscicion(){
+  //   nodoAux = start;
 
-    while (nodoAux.nodoSiguiente != null) {
-      nodoAux = nodoAux.nodoSiguiente;
-    }
-  }
+  //   while (nodoAux.nodoSiguiente != null) {
+  //     nodoAux = nodoAux.nodoSiguiente;
+  //   }
+  // }
   private void buscarPoscicion( int valor ){
     System.out.println("Entre al buscador");
     nodoAux = start;
@@ -210,21 +207,18 @@ class Hibrido{
   private String compararRemover( int valor ){
     Nodo nodoSalida;
 
-    if( nodoAux.nodoSiguiente.valor == valor ){
+    if( nodoAux.nodoSiguiente == null  )
+      return "NO DATA";
+    else if( nodoAux.nodoSiguiente.valor == valor ){
       nodoSalida = nodoAux.nodoSiguiente;
       nodoAux.nodoSiguiente = nodoAux.nodoSiguiente.nodoSiguiente;
-      
+
       return String.valueOf(nodoSalida.valor);
     }
     else
       return "NO DATA";
   }
 
-  
-  private String finalizarProceso(){
-    return "****";
-  }
-  
   Hibrido(){
     start = null;
     nodoAux = null;
