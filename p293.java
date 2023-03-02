@@ -124,8 +124,7 @@ class Hibrido{
   private void pushIn( Nodo nodoEntrada ){
     start.nodoSiguiente = nodoEntrada;
     tope = start.nodoSiguiente;
-
-    System.out.println( start.valor + " " + tope.valor);
+    tope.nodoAnterior = start;
   }
   
   private void insert( Nodo nodoEntrada ){
@@ -135,20 +134,20 @@ class Hibrido{
       nodoAux = start;
       start = nodoEntrada;
       start.nodoSiguiente = nodoAux;
-
+      nodoAux.nodoAnterior = start;
     }
     else if( tope.valor < nodoEntrada.valor ){
+      nodoEntrada.nodoAnterior = tope;
       tope.nodoSiguiente = nodoEntrada;
       tope = tope.nodoSiguiente;
     }
     else{
       buscarPoscicion(nodoEntrada.valor);
       nodoAuxIntercambio = nodoAux.nodoSiguiente;
+      nodoEntrada.nodoSiguiente = nodoAuxIntercambio;
+      nodoEntrada.nodoAnterior = nodoAux;
       nodoAux.nodoSiguiente = nodoEntrada;
-      nodoAux.nodoSiguiente.nodoSiguiente = nodoAuxIntercambio;
     }
-    System.out.println( start.valor + " " + tope.valor);
-
   }
  
   private void buscarPoscicion( int valor ){
@@ -188,6 +187,22 @@ class Hibrido{
         return remove(valor);
       default:
         return "";
+    }
+  }
+
+  private String pop(){
+    Nodo nodoSalida = tope;
+
+
+
+    return "";
+  }
+
+  private void acomodarPosicion(){
+    nodoAux = start;
+
+    while ( nodoAux.nodoSiguiente.nodoSiguiente != null ) {
+      nodoAux = nodoAux.nodoSiguiente;
     }
   }
 
@@ -231,9 +246,11 @@ class Hibrido{
 class Nodo{
   int valor;
   Nodo nodoSiguiente;
+  Nodo nodoAnterior;
 
   Nodo(int valor){
     this.valor = valor;
     nodoSiguiente = null;
+    nodoAnterior = null;
   }
 }
