@@ -101,7 +101,7 @@ class Hibrido{
   public void controlEntrada( String instruccion, int valor ){
     Nodo nodoEntrada = new Nodo(valor);
 
-    if( start == null ) 
+    if( start == null || tope == null ) 
       start = tope = nodoEntrada;
     else
       ejecutarEntrada(instruccion, nodoEntrada);
@@ -122,9 +122,12 @@ class Hibrido{
   }
 
   private void pushIn( Nodo nodoEntrada ){
-    start.nodoSiguiente = nodoEntrada;
-    tope = start.nodoSiguiente;
-    tope.nodoAnterior = start;
+    tope.nodoSiguiente = nodoEntrada;
+    nodoEntrada.nodoAnterior = tope;
+    tope = tope.nodoSiguiente;
+    // start.nodoSiguiente = nodoEntrada;
+    // tope = start.nodoSiguiente;
+    // tope.nodoAnterior = start;
   }
   
   private void insert( Nodo nodoEntrada ){
@@ -160,7 +163,7 @@ class Hibrido{
   }
 
   public String controlSalida( String instruccion, int valor ){
-    if( start == null )
+    if( start == null || tope == null )
       return determinarTipoUnderFlow(instruccion);
     else
       return realizarSalida(instruccion, valor);
@@ -181,6 +184,7 @@ class Hibrido{
   private String realizarSalida( String instruccion, int valor ){
     switch (instruccion) {
       case "POP":
+        return pop();
       case "OUT":
         return popOutAndRemoveStart();
       case "REMOVE":
@@ -191,20 +195,14 @@ class Hibrido{
   }
 
   private String pop(){
-    Nodo nodoSalida = tope;
+    nodoAux = tope;
+    tope = tope.nodoAnterior;
 
+    System.out.println("Saque el: " + nodoAux.valor);
 
-
-    return "";
+    return String.valueOf(nodoAux.valor);
   }
 
-  private void acomodarPosicion(){
-    nodoAux = start;
-
-    while ( nodoAux.nodoSiguiente.nodoSiguiente != null ) {
-      nodoAux = nodoAux.nodoSiguiente;
-    }
-  }
 
   private String popOutAndRemoveStart(){
     nodoAux = start;
