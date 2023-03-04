@@ -38,39 +38,49 @@ class ControladorHibrido{
 
   private void analizarInstruccion( String instruccion ){
     String[] instruccionSeparada = separarInstruccion(instruccion);
-    String instruccionEstructura;
-    int valor = 0;
-
-    if( instruccionSeparada.length > 1){
-      instruccionEstructura = instruccionSeparada[0];
-      valor = Integer.parseInt(instruccionSeparada[1]);
-    }
-    else
-      instruccionEstructura = instruccionSeparada[0];
-    
-    determinarEjecutarInstruccion(instruccionEstructura, valor);
-    
+    ejecutarInstruccion(instruccionSeparada);
   }
 
   private String[] separarInstruccion( String instruccion){
     return instruccion.split(" ");
   }
 
-  private void determinarEjecutarInstruccion( String instruccionEstructura, int valor ){
-    switch (instruccionEstructura) {
+  private void ejecutarInstruccion(String[] instruccionSeparada){
+    String instruccion = instruccionSeparada[0];
+    int valor;
+
+    if( instruccionSeparada.length == 2){
+      valor = Integer.parseInt( instruccionSeparada[1]);
+      ejecutarInstruccionDoble(instruccion, valor);
+    }
+    else if( instruccionSeparada.length == 1 ){
+      ejecutarInstruccionSimple(instruccion);
+    }
+  }
+
+  private void ejecutarInstruccionDoble(String instruccion, int valor){
+    switch (instruccion) {
       case "PUSH":
       case "IN":
       case "INSERT":
-        realizarEntrada(instruccionEstructura, valor);
+        realizarEntrada( instruccion, valor);
+      break;
+      case "REMOVE":
+        realizarSalida(instruccion, valor);
+      
+      default:
         break;
+    }
+  }
+
+  private void ejecutarInstruccionSimple(String instruccion){
+    switch (instruccion) {
       case "POP":
       case "OUT":
-      case "REMOVE":
-        realizarSalida(instruccionEstructura, valor);
+        realizarSalida(instruccion);
         break;
       case "FINISH":
         cadenaFinal += aplicarFormato("****");
-        break;
       default:
         break;
     }
@@ -85,8 +95,13 @@ class ControladorHibrido{
     cadenaFinal += aplicarFormato(valorSalida);
   }
 
+  private void realizarSalida( String instruccion ){
+    String valorSalida = hibrido.controlSalida(instruccion);
+    cadenaFinal += aplicarFormato(valorSalida);
+  }
+
   private String aplicarFormato( String valorSalda ){
-    return ( cadenaFinal.length() == 0) ? valorSalda : "," + valorSalda;
+    return ( cadenaFinal.length() == 0) ? valorSalda : ", " + valorSalda;
   }
 
   public void resetValuesCtrl(){
@@ -103,7 +118,6 @@ class ControladorHibrido{
 class Hibrido{
   Nodo start, tope, nodoAux;
   
-
   public void controlEntrada( String instruccion, int valor ){
     Nodo nodoEntrada = new Nodo(valor);
 
@@ -170,6 +184,12 @@ class Hibrido{
     else
       return realizarSalida(instruccion, valor);
   }
+  public String controlSalida( String instruccion){
+    if( start == null || tope == null )
+      return determinarTipoUnderFlow(instruccion);
+    else
+      return realizarSalida(instruccion);
+  }
 
   private String determinarTipoUnderFlow( String instruccion ){
     switch (instruccion) {
@@ -185,12 +205,18 @@ class Hibrido{
 
   private String realizarSalida( String instruccion, int valor ){
     switch (instruccion) {
+      case "REMOVE":
+        return remove(valor);
+      default:
+        return "";
+    }
+  }
+  private String realizarSalida( String instruccion){
+    switch (instruccion) {
       case "POP":
         return pop();
       case "OUT":
         return outAndRemoveStart();
-      case "REMOVE":
-        return remove(valor);
       default:
         return "";
     }
