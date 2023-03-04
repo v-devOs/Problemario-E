@@ -18,6 +18,7 @@ public class p293{
 
         System.out.println(ctrlHibrido.cadenaFinal);
         instruccion = "";
+        ctrlHibrido.resetValuesCtrl();
       }
 
       input.close();
@@ -88,6 +89,11 @@ class ControladorHibrido{
     return ( cadenaFinal.length() == 0) ? valorSalda : "," + valorSalda;
   }
 
+  public void resetValuesCtrl(){
+    cadenaFinal = "";
+    hibrido = new Hibrido();
+  }
+
   ControladorHibrido(){
     cadenaFinal = "";
     hibrido = new Hibrido();
@@ -125,9 +131,6 @@ class Hibrido{
     tope.nodoSiguiente = nodoEntrada;
     nodoEntrada.nodoAnterior = tope;
     tope = tope.nodoSiguiente;
-    // start.nodoSiguiente = nodoEntrada;
-    // tope = start.nodoSiguiente;
-    // tope.nodoAnterior = start;
   }
   
   private void insert( Nodo nodoEntrada ){
@@ -154,7 +157,6 @@ class Hibrido{
   }
  
   private void buscarPoscicion( int valor ){
-    System.out.println("Entre al buscador");
     nodoAux = start;
 
     while (nodoAux.nodoSiguiente != null && nodoAux.nodoSiguiente.valor < valor) {
@@ -186,7 +188,7 @@ class Hibrido{
       case "POP":
         return pop();
       case "OUT":
-        return popOutAndRemoveStart();
+        return outAndRemoveStart();
       case "REMOVE":
         return remove(valor);
       default:
@@ -198,13 +200,11 @@ class Hibrido{
     nodoAux = tope;
     tope = tope.nodoAnterior;
 
-    System.out.println("Saque el: " + nodoAux.valor);
-
     return String.valueOf(nodoAux.valor);
   }
 
 
-  private String popOutAndRemoveStart(){
+  private String outAndRemoveStart(){
     nodoAux = start;
     start = start.nodoSiguiente;
     return String.valueOf(nodoAux.valor);
@@ -212,7 +212,9 @@ class Hibrido{
 
   private String remove( int valor ){
     if( start.valor == valor )
-      return popOutAndRemoveStart();
+      return outAndRemoveStart();
+    else if( tope.valor == valor )
+      return pop();
     else{
       buscarPoscicion(valor);
       return compararRemover(valor);
@@ -220,13 +222,15 @@ class Hibrido{
   }
 
   private String compararRemover( int valor ){
-    Nodo nodoSalida;
+    Nodo nodoSalida, nodoIntercambio;
 
     if( nodoAux.nodoSiguiente == null  )
       return "NO DATA";
     else if( nodoAux.nodoSiguiente.valor == valor ){
       nodoSalida = nodoAux.nodoSiguiente;
-      nodoAux.nodoSiguiente = nodoAux.nodoSiguiente.nodoSiguiente;
+      nodoIntercambio = nodoAux.nodoSiguiente.nodoSiguiente;
+      nodoIntercambio.nodoAnterior = nodoAux;
+      nodoAux.nodoSiguiente = nodoIntercambio;
 
       return String.valueOf(nodoSalida.valor);
     }
