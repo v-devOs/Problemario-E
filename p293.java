@@ -101,7 +101,7 @@ class ControladorHibrido{
   }
 
   private String aplicarFormato( String valorSalda ){
-    return ( cadenaFinal.length() == 0) ? valorSalda : ", " + valorSalda;
+    return ( cadenaFinal.length() == 0) ? " " + valorSalda : ", " + valorSalda;
   }
 
   public void resetValuesCtrl(){
@@ -121,7 +121,7 @@ class Hibrido{
   public void controlEntrada( String instruccion, int valor ){
     Nodo nodoEntrada = new Nodo(valor);
 
-    if( start == null || tope == null ) 
+    if( start == null && tope == null ) 
       start = tope = nodoEntrada;
     else
       ejecutarEntrada(instruccion, nodoEntrada);
@@ -179,14 +179,24 @@ class Hibrido{
   }
 
   public String controlSalida( String instruccion, int valor ){
-    if( start == null || tope == null )
+    if( start == null && tope == null )
       return determinarTipoUnderFlow(instruccion);
+    else if( start == tope ){
+      nodoAux = start;
+      start = tope = null;
+      return String.valueOf(nodoAux.valor);
+    }
     else
       return realizarSalida(instruccion, valor);
   }
   public String controlSalida( String instruccion){
-    if( start == null || tope == null )
+    if( start == null && tope == null )
       return determinarTipoUnderFlow(instruccion);
+    else if( start == tope ){
+      nodoAux = start;
+      start = tope = null;
+      return String.valueOf(nodoAux.valor);
+    }
     else
       return realizarSalida(instruccion);
   }
