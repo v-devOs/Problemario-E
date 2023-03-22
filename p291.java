@@ -22,11 +22,12 @@ class Operador{
 
   public NumComplejo sumar( NumComplejo numComp1, NumComplejo numComp2 ){
     double sumaParteReal = numComp1.partReal + numComp2.partReal;
+    String sumaParteImaginaria = ( separarParteImaginaria(numComp1) + separarParteImaginaria(numComp2) ) + "i";
 
-    return new NumComplejo(sumaParteReal, "");
+    return new NumComplejo(sumaParteReal, sumaParteImaginaria);
   }
 
-  private double separarPartCompleja( NumComplejo numComp){
-    
+  private double separarParteImaginaria( NumComplejo numComp){
+    return Double.parseDouble(numComp.partImaginaria.split("i")[0]);
   }
 }
