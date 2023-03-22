@@ -1,9 +1,12 @@
 public class p291 {
   public static void main(String[] args) {
-    String pruebaString = "-5i";
-    String[] prueba = pruebaString.split("i");
+    NumComplejo numCpm1 = new NumComplejo(-4, "+5i");
+    NumComplejo numCpm2 = new NumComplejo(8, "-2.5i");
+    Operador op = new Operador();
 
-    System.out.println(Integer.parseInt(prueba[0]));
+    NumComplejo suma = op.sumar(numCpm1, numCpm2);
+
+    System.out.println( suma.partReal + " " + suma.partImaginaria);
   }
 }
 
