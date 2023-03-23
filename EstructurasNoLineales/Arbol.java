@@ -1,7 +1,7 @@
 package EstructurasNoLineales;
 
 public class Arbol{
-  Nodo raiz;
+  Nodo raiz, predecesor, padrePredecesor;
 
   public void insert( int valor ){
     Nodo temp = new Nodo(valor);
@@ -51,8 +51,9 @@ public class Arbol{
           auxBusqueda = auxBusqueda.izq;
       }
 
-      if( auxBusqueda == null )
+      if( auxBusqueda == null ){
         return null;
+      }
       else{
 
         if( auxBusqueda.der == null && auxBusqueda.izq == null){
@@ -66,7 +67,23 @@ public class Arbol{
           return auxBusqueda;
         }
         else if( auxBusqueda.der != null && auxBusqueda.izq != null){
-          return null;
+          
+          buscaPredesesor(auxBusqueda.izq);
+          auxBusqueda.info = predecesor.info;
+
+          if(predecesor.izq != null ){
+            padrePredecesor.der = predecesor.izq;
+          }
+          else{
+            if( predecesor.info > padrePredecesor.info ){
+              padrePredecesor.der = null;
+            }
+            else 
+              padrePredecesor.izq = null;
+          }
+
+          return auxBusqueda;
+          
         }
         else{
 
@@ -91,6 +108,15 @@ public class Arbol{
     }
   }
 
+  private void buscaPredesesor(Nodo inicio ){
+    predecesor = padrePredecesor = inicio;
+
+    while ( predecesor.der != null) {
+      padrePredecesor = predecesor;
+      predecesor = predecesor.der;
+    }
+  }
+
   void recorre( Nodo aux ){
     if( aux.izq != null )
       recorre(aux.izq);
@@ -103,7 +129,7 @@ public class Arbol{
 
 
   Arbol(){
-    raiz = null;
+    raiz = padrePredecesor = predecesor = null;
   }
   
 }

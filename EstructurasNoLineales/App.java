@@ -17,13 +17,14 @@ public class App {
     arbol.insert(33);
     arbol.insert(79);
     arbol.insert(50);
+    arbol.insert(43);
 
     System.out.println("-----------------Recorrido----------------");
 
     Nodo raiz = arbol.raiz;
 
     arbol.recorre(raiz);
-    arbol.remove(41);
+    arbol.remove(46);
     // arbol.remove(33);
     // arbol.remove(43);
     // arbol.remove(50);
