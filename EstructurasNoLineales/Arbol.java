@@ -39,7 +39,7 @@ public class Arbol{
     }
     else{
 
-      Nodo auxBusqueda = raiz, seguidor = auxBusqueda, temp;
+      Nodo auxBusqueda = raiz, seguidor = auxBusqueda;
 
 
       while ( auxBusqueda != null && auxBusqueda.info != valor) {
@@ -66,7 +66,7 @@ public class Arbol{
           return auxBusqueda;
         }
         else if( auxBusqueda.der != null && auxBusqueda.izq != null){
-          
+          return null;
         }
         else{
 
