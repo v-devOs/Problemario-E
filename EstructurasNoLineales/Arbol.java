@@ -117,14 +117,34 @@ public class Arbol{
     }
   }
 
-  void recorre( Nodo aux ){
+  void inOrder( Nodo aux ){
     if( aux.izq != null )
-      recorre(aux.izq);
+      inOrder(aux.izq);
 
     System.out.println(aux.info); //Los procedmientos recursivos usan de manera automatica el segmento stack
 
     if( aux.der != null )
-      recorre(aux.der);
+      inOrder(aux.der);
+  }
+  void preOrder( Nodo aux ){
+    System.out.println(aux.info); //Los procedmientos recursivos usan de manera automatica el segmento stack
+
+    if( aux.izq != null )
+      preOrder(aux.izq);
+
+      
+      if( aux.der != null )
+        preOrder(aux.der);
+  }
+  void postOrder( Nodo aux ){
+    if( aux.izq != null )
+      postOrder(aux.izq);
+
+
+    if( aux.der != null )
+      postOrder(aux.der);
+    
+    System.out.println(aux.info); //Los procedmientos recursivos usan de manera automatica el segmento stack
   }
 
 
