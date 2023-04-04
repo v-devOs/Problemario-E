@@ -21,17 +21,17 @@ public class App {
 
     System.out.println("-----------------Recorrido----------------");
 
-    Nodo raiz = arbol.raiz;
+    // Nodo raiz = arbol.raiz;
 
-    arbol.recorre(raiz);
-    arbol.remove(46);
-    // arbol.remove(33);
-    // arbol.remove(43);
-    // arbol.remove(50);
-    // arbol.remove(79);
-    System.out.println("-----------------Recorrido----------------");
+    // arbol.recorre(raiz);
+    // arbol.remove(46);
+    // // arbol.remove(33);
+    // // arbol.remove(43);
+    // // arbol.remove(50);
+    // // arbol.remove(79);
+    // System.out.println("-----------------Recorrido----------------");
 
-    arbol.recorre(raiz);
+    // arbol.recorre(raiz);
 
     
   }

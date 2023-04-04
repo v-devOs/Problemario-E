@@ -1,36 +1,62 @@
-public class p291 {
-  public static void main(String[] args) {
-    NumComplejo numCpm1 = new NumComplejo(-4, "+5i");
-    NumComplejo numCpm2 = new NumComplejo(8, "-2.5i");
-    Operador op = new Operador();
+// import java.text.DecimalFormat;
 
-    NumComplejo suma = op.sumar(numCpm1, numCpm2);
+// public class p291 {
+//   // public static void main(String[] args) {
+//     double num = 123.35423523;
+//     String aux3 = "12313,12313";
+//     String aux = String.valueOf(num);
+//     String aux2[] = aux3.split(",");
 
-    System.out.println( suma.partReal + " " + suma.partImaginaria);
-  }
-}
+//     System.out.println(aux2[0]);
+   
+//     // DecimalFormat formater = new DecimalFormat("#");
+
+//     // System.out.println(formater.format(num));
+//     // NumComplejo numCpm1 = new NumComplejo(-4, 5);
+//     // NumComplejo numCpm2 = new NumComplejo(8,2.5);
+//     // Operador op = new Operador();
+
+//     // NumComplejo suma = op.sumar(numCpm1, numCpm2);
+
+//     // suma.mostrar();
+//   }
+// }
 
 
-class NumComplejo{
-  double partReal;
-  String partImaginaria;
+// class NumComplejo{
+//   double partReal;
+//   double partImaginaria;
 
-  NumComplejo( double partReal, String partImaginaria){
-    this.partReal = partReal;
-    this.partImaginaria = partImaginaria;
-  }
-}
+//   public void mostrar(){
+//     System.out.println( aplicarFormatoString(partReal) + " " + aplicarFormatoString(partImaginaria));
+//   }
+//   private String aplicarFormatoString( double parteNumComplejo ){
+//     return ( partImaginaria < 0 ) ? "-" + parteNumComplejo : "+" + parteNumComplejo;
+//   }
 
-class Operador{
+//   // private String redondear( double parteNumComplejo ){
+//   //   String auxCadenaNumCpj = String.valueOf(parteNumComplejo);
+//   // }
 
-  public NumComplejo sumar( NumComplejo numComp1, NumComplejo numComp2 ){
-    double sumaParteReal = numComp1.partReal + numComp2.partReal;
-    String sumaParteImaginaria = ( separarParteImaginaria(numComp1) + separarParteImaginaria(numComp2) ) + "i";
 
-    return new NumComplejo(sumaParteReal, sumaParteImaginaria);
-  }
+//   NumComplejo( double partReal, double partImaginaria){
+//     this.partReal = partReal;
+//     this.partImaginaria = partImaginaria;
+//   }
+// }
 
-  private double separarParteImaginaria( NumComplejo numComp){
-    return Double.parseDouble(numComp.partImaginaria.split("i")[0]);
-  }
-}
+// class Operador{
+//   DecimalFormat formaterEnteros, formaterDoubles;
+
+//   public NumComplejo sumar( NumComplejo numComp1, NumComplejo numComp2 ){
+//     double sumaParteReal = numComp1.partReal + numComp2.partReal;
+//     double sumaParteImaginaria = numComp1.partImaginaria + numComp2.partImaginaria;
+
+//     return new NumComplejo(sumaParteReal, sumaParteImaginaria);
+//   }
+
+//   Operador(){
+//     formaterEnteros = new DecimalFormat("#");
+//     formaterDoubles = new DecimalFormat("#.##");
+//   }
+// }
