@@ -1,3 +1,5 @@
+package Hibrido;
+
 import java.util.Scanner;
 
 public class p293{

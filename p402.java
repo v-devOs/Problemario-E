@@ -5,6 +5,9 @@ public class p402 {
     Scanner input = new Scanner(System.in);
     Procesador procesador = new Procesador();
 
+    
+    
+
     try {
       int contador, casosPrueba;
 
@@ -22,13 +25,41 @@ public class p402 {
 }
 
 class Procesador{
+  String binarioInvertido;
+  pila pila;
 
+  public void procesarNumero(int numero){
+    String binario = Integer.toBinaryString(numero);
+    invertirNumero( binario );
+  }
+
+  private void invertirNumero( String numero ){
+    apilarNumero(numero);
+
+  }
+  private void apilarNumero( String numero){
+    int index = 0;
+    String valorEntrada;
+
+
+    for ( index = 0; index < numero.length(); index++) {
+      valorEntrada = String.valueOf(numero.charAt(index));
+      pila.push(valorEntrada);
+    }
+  }
+
+ 
+
+  Procesador(){
+    binarioInvertido = "";
+    pila = new pila();
+  }
 }
 
 class pila{
   Nodo tope;
 
-  public void input(String entrada){
+  public void push(String entrada){
     Nodo nodoEntrada = new Nodo(entrada);
 
     if( tope == null )
@@ -39,13 +70,13 @@ class pila{
     }
   }
 
-  public Nodo output(){
+  public String pop(){
     if( tope == null )
       return null;
     else{
       Nodo aux = tope;
       tope = tope.sig;
-      return aux;
+      return aux.valor;
     }
   }
 
