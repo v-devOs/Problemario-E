@@ -1,0 +1,5 @@
+Estucturas no lineales
+
+Arboles -- binarios
+        -- terciarios --- se refiere al # de conexiones dependientes de un nodo
+        -- n-arios 

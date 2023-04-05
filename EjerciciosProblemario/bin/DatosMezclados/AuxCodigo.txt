@@ -1,0 +1,10 @@
+// haFinalizado = buscador.finalizoLectura(limitInfe, limitSup, datoBuscar);
+
+        // if( haFinalizado ) return;
+
+        public boolean finalizoLectura( int limiteInferior, int limiteSuperior, int datoBuscar){
+    return ( limiteInferior == 0 && limiteSuperior == 0 && datoBuscar == 0 ) ? true : false;
+  }
+
+   // if( limitSup == datoBuscar ) return ++comparaciones;
+    // else return -1;
