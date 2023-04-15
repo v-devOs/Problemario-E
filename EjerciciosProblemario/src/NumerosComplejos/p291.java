@@ -30,7 +30,9 @@ class Controlador{
 
   public void procesarEntradas( String entradas[] ){
     String operacion = entradas[4];
+
     crearNumerosImaginarios(entradas);
+
     numImResult = realizarOperacion(operacion);
     numImResult.mostrar();
   }
@@ -51,7 +53,7 @@ class Controlador{
         return numIm1.restar(numIm2);
 
       case "*":
-        return numIm1.sumar(numIm2);
+        return numIm1.multi(numIm2);
 
       case "/":
         return numIm1.sumar(numIm2);
@@ -79,13 +81,31 @@ class NumImaginario{
 
     return new NumImaginario(newPartReal, newPartIma);
   }
-  // public NumImaginario multi( NumImaginario numIm2 ){
-    
-  // }
+  public NumImaginario multi( NumImaginario numIm2 ){
+    String newPartReal = auxMultiPartReal(numIm2);
+    String newPartIma = auxMultiParIma(numIm2);
+
+    return new NumImaginario(newPartReal, newPartIma);
+  }
   // public NumImaginario dividir( NumImaginario numIm2 ){
     
   // }
-  
+
+  private String auxMultiPartReal( NumImaginario numIm2){
+    double part1 = this.partReal * numIm2.partReal;
+    double part2 = ( this.partImaginaria * numIm2.partImaginaria) * -1;
+
+    return String.valueOf( part1 + part2 );
+  }
+
+  private String auxMultiParIma( NumImaginario numIm2){
+    double part1 = this.partReal * numIm2.partImaginaria;
+    double part2 = ( this.partImaginaria * numIm2.partReal);
+
+    return String.valueOf( part1 + part2 );
+  }
+
+
   public void mostrar(){
     System.out.println(partReal + " " + partImaginaria + "i");
   }
