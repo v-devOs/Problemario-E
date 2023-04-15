@@ -9,6 +9,7 @@ public class p291 {
     String entradasSeparadas[];
     String entrada;
 
+
     try {
       while (true) {
         entrada = input.nextLine();
@@ -17,6 +18,7 @@ public class p291 {
       }
             
     } catch (Exception e) {
+      System.out.println(e);
       input.close();
     }
   }
@@ -64,6 +66,7 @@ class Controlador{
 class NumImaginario{
   double partReal;
   double partImaginaria;
+  private Formateador formateador;
 
   public NumImaginario sumar( NumImaginario numIm2 ){
     String newPartReal = String.valueOf(this.partReal + numIm2.partReal);
@@ -127,13 +130,17 @@ class NumImaginario{
   }
   
   public void mostrar(){
-    System.out.println(partReal + " " + partImaginaria + "i");
+
+    String partMostrarReal = formateador.formatearNumero(partReal, true);
+    String partMostrarIma = formateador.formatearNumero(partImaginaria, false);
+
+    System.out.println(partMostrarReal +  partMostrarIma + "i");
   }
  
-
   NumImaginario( String partReal, String partImaginaria){
     this.partReal = Double.parseDouble(partReal);
     this.partImaginaria = limpiarParteIma(partImaginaria);
+    formateador = new Formateador();
   }
 
   private double limpiarParteIma( String partImagLimpiar ){
@@ -142,3 +149,39 @@ class NumImaginario{
   }
 }
 
+class Formateador{
+
+  public String formatearNumero( double numero, boolean esPartReal ){
+    String numeroRedondeado = redondearNumero(String.valueOf(numero));
+
+    if(esPartReal)
+      return numeroRedondeado;
+    else{
+      String partImaFormateada = formatearParteImaginaria(Double.parseDouble(numeroRedondeado));
+      return partImaFormateada;
+    }
+  }
+
+  private String redondearNumero( String numero  ){
+    int partCompleta = Integer.parseInt(numero.split("\\.")[0]);
+    String parteDecimal = numero.split("\\.")[1];
+
+    if( parteDecimal.compareTo("0") == 0){
+      if( Double.parseDouble(numero) < 0 && partCompleta == 0 ){
+        return "-" + String.valueOf(partCompleta);
+      }
+      else{
+        return String.valueOf(partCompleta);
+      }
+    }
+    else{
+      return partCompleta + "." + parteDecimal.substring(0, 1);
+    }
+  }
+
+  
+  private String formatearParteImaginaria( double numero ){
+    return numero < 0 ? " -" + redondearNumero(String.valueOf(numero)) : " +" + redondearNumero(String.valueOf(numero));
+  }
+  
+}
