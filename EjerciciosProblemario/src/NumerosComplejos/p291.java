@@ -56,7 +56,7 @@ class Controlador{
         return numIm1.multi(numIm2);
 
       case "/":
-        return numIm1.sumar(numIm2);
+        return numIm1.dividir(numIm2);
 
       default:
         return null;
@@ -82,30 +82,53 @@ class NumImaginario{
     return new NumImaginario(newPartReal, newPartIma);
   }
   public NumImaginario multi( NumImaginario numIm2 ){
-    String newPartReal = auxMultiPartReal(numIm2);
-    String newPartIma = auxMultiParIma(numIm2);
+    String newPartReal = auxMultiPartReal(numIm2, false);
+    String newPartIma = auxMultiPartIma(numIm2, false);
 
     return new NumImaginario(newPartReal, newPartIma);
   }
-  // public NumImaginario dividir( NumImaginario numIm2 ){
-    
-  // }
+  public NumImaginario dividir( NumImaginario numIm2 ){
+    String part1 = auxMultiPartReal(numIm2, true);
+    String part2 = auxMultiPartIma(numIm2, true);
+    String part3 = auxDivPartDividendo(numIm2);
 
-  private String auxMultiPartReal( NumImaginario numIm2){
+    return new NumImaginario(auxDivCocienteDivisor(part1, part3), auxDivCocienteDivisor(part2, part3));
+  }
+
+  private String auxMultiPartReal( NumImaginario numIm2, boolean esDivision ){
     double part1 = this.partReal * numIm2.partReal;
-    double part2 = ( this.partImaginaria * numIm2.partImaginaria) * -1;
+    double part2;
+
+    if( esDivision ) part2 = ( this.partImaginaria * (numIm2.partImaginaria * -1)) * -1;
+    else part2 = ( this.partImaginaria * numIm2.partImaginaria) * -1;
 
     return String.valueOf( part1 + part2 );
   }
 
-  private String auxMultiParIma( NumImaginario numIm2){
-    double part1 = this.partReal * numIm2.partImaginaria;
+  private String auxMultiPartIma( NumImaginario numIm2, boolean esDivision ){
+    double part1;
     double part2 = ( this.partImaginaria * numIm2.partReal);
 
+    if( esDivision ) part1 = this.partReal * (numIm2.partImaginaria *-1);
+    else part1 = this.partReal * numIm2.partImaginaria;
+
     return String.valueOf( part1 + part2 );
   }
 
+  private String auxDivPartDividendo( NumImaginario numIm2 ){
+    double part1 = numIm2.partReal * numIm2.partReal;
+    double part2 = (numIm2.partImaginaria * ( numIm2.partImaginaria * -1)) * -1;
 
+    return String.valueOf( part1 + part2 );
+  }
+
+  private String auxDivCocienteDivisor( String part, String cociente ){
+    double partToWork = Double.parseDouble(part);
+    double cocienteToWork = Double.parseDouble(cociente);
+
+    return String.valueOf(partToWork / cocienteToWork );
+  }
+  
   public void mostrar(){
     System.out.println(partReal + " " + partImaginaria + "i");
   }
