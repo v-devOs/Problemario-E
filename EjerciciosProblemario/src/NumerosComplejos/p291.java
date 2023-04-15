@@ -9,21 +9,18 @@ public class p291 {
     String entradasSeparadas[];
     String entrada;
 
-
     try {
-      entrada = input.nextLine();
-      entradasSeparadas = entrada.split(" ");
-      controlador.procesarEntradas(entradasSeparadas);
-
-      input.close();
-      
+      while (true) {
+        entrada = input.nextLine();
+        entradasSeparadas = entrada.split(" ");
+        controlador.procesarEntradas(entradasSeparadas);
+      }
+            
     } catch (Exception e) {
       input.close();
     }
   }
 }
-
-
 
 class Controlador{
   NumImaginario numIm1, numIm2, numImResult;
@@ -64,7 +61,6 @@ class Controlador{
   }
 }
 
-
 class NumImaginario{
   double partReal;
   double partImaginaria;
@@ -88,11 +84,12 @@ class NumImaginario{
     return new NumImaginario(newPartReal, newPartIma);
   }
   public NumImaginario dividir( NumImaginario numIm2 ){
-    String part1 = auxMultiPartReal(numIm2, true);
-    String part2 = auxMultiPartIma(numIm2, true);
-    String part3 = auxDivPartDividendo(numIm2);
+    String parteRealCociente = auxMultiPartReal(numIm2, true);
+    String parteImaginariaCociente = auxMultiPartIma(numIm2, true);
+    String divisor = auxDivPartDividendo(numIm2);
 
-    return new NumImaginario(auxDivCocienteDivisor(part1, part3), auxDivCocienteDivisor(part2, part3));
+    return new NumImaginario(auxDivCocienteDivisor(parteRealCociente, divisor), 
+                            auxDivCocienteDivisor(parteImaginariaCociente, divisor));
   }
 
   private String auxMultiPartReal( NumImaginario numIm2, boolean esDivision ){
@@ -122,11 +119,11 @@ class NumImaginario{
     return String.valueOf( part1 + part2 );
   }
 
-  private String auxDivCocienteDivisor( String part, String cociente ){
-    double partToWork = Double.parseDouble(part);
+  private String auxDivCocienteDivisor( String cociente, String divisor ){
     double cocienteToWork = Double.parseDouble(cociente);
+    double divisorToWork = Double.parseDouble(divisor);
 
-    return String.valueOf(partToWork / cocienteToWork );
+    return String.valueOf(cocienteToWork / divisorToWork );
   }
   
   public void mostrar(){
