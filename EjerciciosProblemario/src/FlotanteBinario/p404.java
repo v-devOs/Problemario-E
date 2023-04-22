@@ -12,8 +12,8 @@ public class p404 {
       
       while (true) {
         numConvertir = input.nextFloat();
-        conversor.setValues( String.valueOf( numConvertir ));
-        conversor.convertirNumero();
+        conversor.setValues( String.valueOf( numConvertir ) );
+        System.out.println(conversor.convertirNumero());
       }
 
     } catch (Exception e) {
@@ -29,7 +29,7 @@ class Conversor{
   private float partFraccion;
 
   public void setValues( String numeroConvertir ){
-    String[] partsNum = numeroConvertir.split("\\.");
+    String[] partsNum = separarNumero(numeroConvertir);
 
     partEntera = Integer.parseInt(partsNum[0]);
     partFraccion = Float.parseFloat(("." + partsNum[1]));
@@ -38,17 +38,32 @@ class Conversor{
   }
 
   public String convertirNumero(  ){
-    
-
-    return "";
+    return convertirParteEntera() + "." + convertirParteFraccionaria();
   }
 
   private String convertirParteEntera(){
     return Integer.toBinaryString( partEntera );
   }
 
-  private void convertirParteFraccionaria(){
+  private String convertirParteFraccionaria(){
+    String partsNum[];
+    String conversion = "";
+    float numAux;
 
+    while( this.partFraccion != 0.0 ){
+
+      numAux = partFraccion * 2;
+      partsNum = separarNumero( String.valueOf(numAux));
+
+      conversion += partsNum[0];
+      this.partFraccion = Float.parseFloat(( "." + partsNum[1]));
+    }
+
+    return conversion;
+  }
+
+  private String[] separarNumero( String num ){
+    return num.split("\\.");
   }
 
 }
