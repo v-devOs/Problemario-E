@@ -33,8 +33,6 @@ class Conversor{
 
     partEntera = Integer.parseInt(partsNum[0]);
     partFraccion = Float.parseFloat(("." + partsNum[1]));
-
-    System.out.println(partEntera + " " + partFraccion);
   }
 
   public String convertirNumero(  ){
@@ -50,13 +48,14 @@ class Conversor{
     String conversion = "";
     float numAux;
 
-    while( this.partFraccion != 0.0 ){
+    while( this.partFraccion != 0 && conversion.length() <= 20){
 
       numAux = partFraccion * 2;
       partsNum = separarNumero( String.valueOf(numAux));
 
       conversion += partsNum[0];
       this.partFraccion = Float.parseFloat(( "." + partsNum[1]));
+
     }
 
     return conversion;
