@@ -12,23 +12,20 @@ public class p358 {
     String nombrePrograma, huella;
     int countVirus = 0;
 
+    
     try {
 
-      String hola = "virus Hola virus virus virus";
+      nombrePrograma = input.nextLine();
+      huella = input.nextLine();
 
-      System.out.println(hola.substring(5).split("virus").length);
+      archivo = new Scanner( new File(nombrePrograma));
 
-      // nombrePrograma = input.nextLine();
-      // huella = input.nextLine();
+      while ( archivo.hasNextLine() ) {
+        buscador.setValues(huella);
+        countVirus += buscador.procesarLinea( archivo.nextLine() );
+      }
 
-      // archivo = new Scanner( new File(nombrePrograma));
-
-      // while ( archivo.hasNextLine() ) {
-      //   buscador.setValues(huella);
-      //   countVirus += buscador.procesarLinea( archivo.nextLine() );
-      // }
-
-      // System.out.println(huella + " " + countVirus);
+      System.out.println(huella + " " + countVirus);
       
     } catch (Exception e) {
       System.out.println( e.toString() );
@@ -54,25 +51,24 @@ class Buscador{
   }
 
   private int buscarVirus( String lineaProcesar ){
-    int countVirus = 0;
-    int auxStartEnd = 0;
-    int lengthLineaSplitted = lineaProcesar.split(huella).length;
+    int countVirus = 0, index = 0;
 
-    if( lineaProcesar.endsWith(huella) ){ 
-      countVirus++;
-      auxStartEnd++;
+    while ( lineaProcesar.contains(huella )) {
+      
+      if( lineaProcesar.startsWith(huella) ){
+        countVirus++;
+        lineaProcesar = recortarInicio(lineaProcesar);
+      }
+
     }
-
-    if( lineaProcesar.startsWith(huella) ) {
-      countVirus++;
-      auxStartEnd++;
-    }
-
-    if( lengthLineaSplitted - auxStartEnd > 1 ){
-      countVirus += lengthLineaSplitted - auxStartEnd - 1;
-    }
-       
-
+    
+    
     return countVirus;
   }
+
+  private String recortarInicio( String linea ){
+    return linea.substring(huella.length());
+  }
+
+  
 }
