@@ -11,22 +11,25 @@ public class p358 {
     Scanner archivo;
     String nombrePrograma, huella;
     int countVirus = 0;
-
-
-    
+ 
     try {
 
       nombrePrograma = input.nextLine();
-      huella = input.nextLine();
 
-      archivo = new Scanner( new File(nombrePrograma));
-
-      while ( archivo.hasNextLine() ) {
-        buscador.setValues(huella);
-        countVirus += buscador.procesarLinea( archivo.nextLine() );
+      while(true){
+        
+        huella = input.nextLine();
+        archivo = new Scanner( new File(nombrePrograma));
+  
+        while ( archivo.hasNextLine() ) {
+          buscador.setValues(huella);
+          countVirus += buscador.procesarLinea( archivo.nextLine().toLowerCase() );
+        }
+  
+        System.out.println(huella + " " + countVirus);
+        archivo.close();
+        countVirus = 0;
       }
-
-      System.out.println(huella + " " + countVirus);
       
     } catch (Exception e) {
       System.out.println( e.toString() );
@@ -46,7 +49,7 @@ class Buscador{
   }
 
   public int procesarLinea( String lineaProcesar){
-    return incluyeHuella(lineaProcesar) ? buscarVirus(lineaProcesar.toLowerCase()) : 0;
+    return incluyeHuella(lineaProcesar) ? buscarVirus(lineaProcesar) : 0;
   }
 
   private boolean incluyeHuella( String lineaProcesar ){
@@ -75,11 +78,12 @@ class Buscador{
       countVirus++;
     }
 
+
     if( linea.endsWith(huella) && linea.length() > huella.length() ){
       linea = recortarFinal(linea);
       countVirus++;
     }
-    
+
     return linea;
   }
 
@@ -101,11 +105,12 @@ class Buscador{
 
       if( Character.compare(auxHuella, auxLinea) == 0 ){
         linea = linea.substring(index);
+        System.out.println(linea);
       }
 
       index++;
     }
-
-    return linea;
+    
+    return linea.trim();
   }
 }
