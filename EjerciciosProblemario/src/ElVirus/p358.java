@@ -100,12 +100,11 @@ class Buscador{
     int index = 0;
 
     while ( !linea.startsWith( huella ) && index < linea.length() ) {
-      
       auxLinea = linea.charAt(index);
 
       if( Character.compare(auxHuella, auxLinea) == 0 ){
         linea = linea.substring(index);
-        System.out.println(linea);
+        index = 0;
       }
 
       index++;
