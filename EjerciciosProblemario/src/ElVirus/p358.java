@@ -12,6 +12,7 @@ public class p358 {
     String nombrePrograma, huella;
     int countVirus = 0;
 
+
     
     try {
 
@@ -37,13 +38,15 @@ public class p358 {
 class Buscador{
 
   private String huella;
+  private int countVirus;
 
   public void setValues( String huella ){
-    this.huella = huella;
+    this.huella = huella.toLowerCase();
+    this.countVirus = 0;
   }
 
   public int procesarLinea( String lineaProcesar){
-    return incluyeHuella(lineaProcesar) ? buscarVirus(lineaProcesar) : 0;
+    return incluyeHuella(lineaProcesar) ? buscarVirus(lineaProcesar.toLowerCase()) : 0;
   }
 
   private boolean incluyeHuella( String lineaProcesar ){
@@ -51,24 +54,58 @@ class Buscador{
   }
 
   private int buscarVirus( String lineaProcesar ){
-    int countVirus = 0, index = 0;
 
-    while ( lineaProcesar.contains(huella )) {
+    while ( lineaProcesar.contains( huella ) ) {
       
-      if( lineaProcesar.startsWith(huella) ){
-        countVirus++;
-        lineaProcesar = recortarInicio(lineaProcesar);
+      if( lineaProcesar.startsWith(huella) || lineaProcesar.endsWith(huella) ){
+        lineaProcesar = recortarExtremos(lineaProcesar);
       }
-
+      else{
+        lineaProcesar = recortarMedio(lineaProcesar);
+      }
     }
-    
     
     return countVirus;
   }
 
-  private String recortarInicio( String linea ){
-    return linea.substring(huella.length());
+  private String recortarExtremos( String linea ){
+
+    if( linea.startsWith(huella) ){
+      linea = recortarInicio(linea);
+      countVirus++;
+    }
+
+    if( linea.endsWith(huella) && linea.length() > huella.length() ){
+      linea = recortarFinal(linea);
+      countVirus++;
+    }
+    
+    return linea;
   }
 
-  
+  private String recortarInicio( String linea ){
+    return linea.substring(huella.length()).trim();
+  }
+  private String recortarFinal( String linea ){
+    return linea.substring(0, linea.length() - huella.length()).trim();
+  }
+
+  private String recortarMedio( String linea ){
+    char auxHuella = huella.charAt(0);
+    char auxLinea;
+    int index = 0;
+
+    while ( !linea.startsWith( huella ) && index < linea.length() ) {
+      
+      auxLinea = linea.charAt(index);
+
+      if( Character.compare(auxHuella, auxLinea) == 0 ){
+        linea = linea.substring(index);
+      }
+
+      index++;
+    }
+
+    return linea;
+  }
 }
