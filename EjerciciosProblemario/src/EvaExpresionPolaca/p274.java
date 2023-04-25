@@ -14,6 +14,7 @@ public class p274 {
 
         expresionEvaluar = input.nextLine();
         System.out.println(evaluador.evaluarExpresion(expresionEvaluar));
+        evaluador.limpiar();
       }
     } catch (Exception e) {
 
@@ -44,7 +45,12 @@ class Evaluador{
   }
 
   private void validarPorOperadores(){
-    esValidaPorOperadores = pilaDatos.totalDatos > 1;
+   if( pilaDatos.totalDatos > 1 ) esValidaPorOperadores = false;
+  }
+
+  public void limpiar(){
+    pilaDatos.vaciarPila();
+    esValidaPorOperadores = esValidaPorOperandos = true;
   }
   private void procesarDato( String dato ){
 
@@ -136,6 +142,14 @@ class Pila{
       tope = tope.sig;
       totalDatos--;
       return aux.valor;
+    }
+  }
+
+  public void vaciarPila(){
+    if( tope != null ){
+      while( tope != null ){
+        pop();
+      }
     }
   }
 
