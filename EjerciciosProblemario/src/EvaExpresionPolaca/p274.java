@@ -23,21 +23,29 @@ public class p274 {
 }
 
 class Evaluador{
-  private boolean esValida;
-  private Pila pilaDatos; 
+  private Pila pilaDatos;
+  private String operando1, operando2; 
+  private boolean esValidaPorOperandos, esValidaPorOperadores;
 
   public String evaluarExpresion( String expresion ){
     String partsExpresion[] = expresion.split(" ");
     int index = 0;
 
-    while (esValida && index < partsExpresion.length) {
-      
+    while (esValidaPorOperandos && index < partsExpresion.length) {
+      procesarDato( partsExpresion[index] );
       index++;
     }
 
-    return "";
+    validarPorOperadores();
+
+    if( esValidaPorOperadores && esValidaPorOperandos ) return "OK";
+    else if( !esValidaPorOperandos ) return "FALTA OPERANDO";
+    else return "FALTA OPERADOR";        
   }
 
+  private void validarPorOperadores(){
+    esValidaPorOperadores = pilaDatos.totalDatos > 1;
+  }
   private void procesarDato( String dato ){
 
     switch (dato) {
@@ -45,32 +53,59 @@ class Evaluador{
       case "-":
       case "/":
       case "*":
+        controlOperacion(dato);
+        break;
     
       default:
+        apilarOperando(dato);
         break;
     }
   }
 
-  private void sumar(){
+  private void controlOperacion( String operacion ){
+    desapilarOperandos();
+    validarOperandos();
+
+    String simboloOperacion = "";
+
+    switch (operacion) {
+      case "+":
+        simboloOperacion = "+";
+        break;
+      case "-":
+        simboloOperacion = "-";
+        break;
+      case "/":
+        simboloOperacion = "/";
+        break;
+      case "*":
+        simboloOperacion = "*";
+        break;
     
-  }
-  private void restar(){
+      default:
+        break;
+    }
 
+    pilaDatos.push( operando1 + simboloOperacion + operando2 );
   }
-  private void dividir(){
 
+  private void desapilarOperandos(){
+    operando1 = pilaDatos.pop();
+    operando2 = pilaDatos.pop();
   }
-  private void multiplicar(){
 
+  private void validarOperandos(){
+    if( operando1 == null || operando2 == null ) esValidaPorOperandos = false;
   }
 
   private void apilarOperando( String operando ){
-
+    pilaDatos.push(operando);
   }
 
   Evaluador(){
-    esValida = true;
+    esValidaPorOperandos = esValidaPorOperadores = true;
     pilaDatos = new Pila();
+    operando1 = operando2 = "";
   }
 
 
@@ -78,6 +113,7 @@ class Evaluador{
 
 class Pila{
   Nodo tope;
+  int totalDatos;
 
   public void push(String entrada){
     Nodo nodoEntrada = new Nodo(entrada);
@@ -88,6 +124,8 @@ class Pila{
       nodoEntrada.sig = tope;
       tope = nodoEntrada;
     }
+    
+    totalDatos++;
   }
 
   public String pop(){
@@ -96,12 +134,14 @@ class Pila{
     else{
       Nodo aux = tope;
       tope = tope.sig;
+      totalDatos--;
       return aux.valor;
     }
   }
 
   Pila(){
     tope = null;
+    totalDatos = 0;
   }
 }
 
