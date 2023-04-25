@@ -1,5 +1,6 @@
 package NumerosComplejos;
 
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class p291 {
@@ -18,7 +19,6 @@ public class p291 {
       }
             
     } catch (Exception e) {
-      System.out.println(e);
       input.close();
     }
   }
@@ -134,7 +134,10 @@ class NumImaginario{
     String partMostrarReal = formateador.formatearNumero(partReal, true);
     String partMostrarIma = formateador.formatearNumero(partImaginaria, false);
 
-    System.out.println(partMostrarReal +  partMostrarIma + "i");
+    if( partReal < 0 && !partMostrarReal.contains("-") ) partMostrarReal = "-" + partMostrarReal;
+    if( partImaginaria < 0 && !partMostrarIma.contains("-")) partMostrarIma = "-" + partMostrarIma;
+
+    System.out.println(partMostrarReal + partMostrarIma + "i");
   }
  
   NumImaginario( String partReal, String partImaginaria){
@@ -150,6 +153,7 @@ class NumImaginario{
 }
 
 class Formateador{
+  DecimalFormat format;
 
   public String formatearNumero( double numero, boolean esPartReal ){
     String numeroRedondeado = redondearNumero(String.valueOf(numero));
@@ -166,22 +170,20 @@ class Formateador{
     int partCompleta = Integer.parseInt(numero.split("\\.")[0]);
     String parteDecimal = numero.split("\\.")[1];
 
-    if( parteDecimal.compareTo("0") == 0){
-      if( Double.parseDouble(numero) < 0 && partCompleta == 0 ){
-        return "-" + String.valueOf(partCompleta);
-      }
-      else{
-        return String.valueOf(partCompleta);
-      }
+
+    if( parteDecimal.equals("0")){
+      return String.valueOf(partCompleta);
     }
     else{
-      return partCompleta + "." + parteDecimal.substring(0, 1);
+      return format.format( Double.parseDouble(numero) );
     }
   }
-
   
   private String formatearParteImaginaria( double numero ){
     return numero < 0 ? " -" + redondearNumero(String.valueOf(numero)) : " +" + redondearNumero(String.valueOf(numero));
   }
   
+  Formateador(){
+    format = new DecimalFormat("#.#");
+  }
 }
