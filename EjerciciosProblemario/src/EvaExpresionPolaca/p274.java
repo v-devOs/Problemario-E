@@ -98,6 +98,7 @@ class Evaluador{
   private void desapilarOperandos(){
     operando1 = pilaDatos.pop();
     operando2 = pilaDatos.pop();
+
   }
 
   private void validarOperandos(){
