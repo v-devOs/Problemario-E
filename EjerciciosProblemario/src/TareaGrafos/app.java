@@ -19,6 +19,8 @@ public class app {
         generador.apilarArista(aristaLeido);
         generador.validarVertices(aristaLeido);
 
+        generador.iniciarMatriz();
+
         System.out.println("Desea agregar otro arista?\n 1. No\n 2. Si");
         res = Integer.parseInt(input.nextLine());
 
@@ -37,6 +39,9 @@ public class app {
 class Generador{
   private String vertices;
   private String aristas;
+  private int[][] matriz;
+
+  private int posicionVert1, posicionVert2;
 
   public void validarVertices( String arista ){
 
@@ -52,12 +57,42 @@ class Generador{
     aristas += " " + arista;
   }
 
+  public void iniciarMatriz(){
+    matriz = new int[vertices.length()][vertices.length()];
+  }
+
+  public void generarMatriz(){
+    String splitedVertices[] = vertices.split("");
+    String splitedAristas[] = aristas.split(" ");
+
+    int indexVert, indexAris;
+
+    for ( indexAris = 0; indexAris < splitedAristas.length; indexAris++) {
+
+    }
+    
+  }
+
+  private void obtenerPosiciones( String arista, String[] splitedVertices ){
+
+    String splitedArista[] = arista.split("");
+
+    posicionVert1 = 
+
+  }
+
+  private int obtenerPosicion( String partArista, String[] splitedVertices ){
+
+    int indexVertices;
+
+    for ( indexVertices = 0; indexVertices < splitedVertices.length; indexVertices++) {
+      
+    }
+  }
+
+
   Generador(){
     vertices = aristas = "";
   }
 
 }
-
-
-
-
