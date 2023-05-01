@@ -2,161 +2,154 @@ package EvaExpresionPolaca;
 
 import java.util.Scanner;
 
+
 public class p274 {
   public static void main(String[] args) {
-    
-    Evaluador evaluador = new Evaluador();
-    Scanner input = new Scanner(System.in);
-    String expresionEvaluar;
 
+    Scanner input = new Scanner(System.in);
+    Evaluador evaluador = new Evaluador();
+    String expresion;
+    
     try {
+
       while (true) {
 
-        expresionEvaluar = input.nextLine();
-        System.out.println(evaluador.evaluarExpresion(expresionEvaluar));
-        evaluador.limpiar();
+        expresion = input.nextLine();
+        evaluador.evaluarExpresion(expresion.split(" "));
+
       }
+      
     } catch (Exception e) {
 
       input.close();
     }
   }
+  
 }
 
 class Evaluador{
   private Pila pilaDatos;
-  private String operando1, operando2; 
-  private boolean esValidaPorOperandos, esValidaPorOperadores;
+  
 
-  public String evaluarExpresion( String expresion ){
-    String partsExpresion[] = expresion.split(" ");
+  public void evaluarExpresion( String[] splitedExp ){
+    boolean esValidaPorOperadores, esValidaPorOperandos = true;
     int index = 0;
 
-    while (esValidaPorOperandos && index < partsExpresion.length) {
-      procesarDato( partsExpresion[index] );
+    while ( esValidaPorOperandos && index < splitedExp.length ) {
+      
+      esValidaPorOperandos = evaluarPartExp(splitedExp[index]);
+
       index++;
     }
 
-    validarPorOperadores();
+    esValidaPorOperadores = validarPorOperadores();
 
-    if( esValidaPorOperadores && esValidaPorOperandos ) return "OK";
-    else if( !esValidaPorOperandos ) return "FALTA OPERANDO";
-    else return "FALTA OPERADOR";        
+    mostrarMensaje( esValidaPorOperandos, esValidaPorOperadores );
+
+    limpiarPila();
   }
 
-  private void validarPorOperadores(){
-   if( pilaDatos.totalDatos > 1 ) esValidaPorOperadores = false;
-  }
+  private boolean evaluarPartExp( String partExp ){
 
-  public void limpiar(){
-    pilaDatos.vaciarPila();
-    esValidaPorOperadores = esValidaPorOperandos = true;
-  }
-  private void procesarDato( String dato ){
-
-    switch (dato) {
+    switch (partExp) {
       case "+":
       case "-":
-      case "/":
       case "*":
-        controlOperacion(dato);
-        break;
-    
+      case "/":
+      case "^":
+        return realizarOperacion(partExp);
+
       default:
-        apilarOperando(dato);
-        break;
+        return apilarOperando(partExp);
     }
   }
 
-  private void controlOperacion( String operacion ){
-    desapilarOperandos();
-    validarOperandos();
-
-    String simboloOperacion = "";
-
-    switch (operacion) {
-      case "+":
-        simboloOperacion = "+";
-        break;
-      case "-":
-        simboloOperacion = "-";
-        break;
-      case "/":
-        simboloOperacion = "/";
-        break;
-      case "*":
-        simboloOperacion = "*";
-        break;
+  private boolean realizarOperacion( String op ){
     
-      default:
-        break;
+    String operan1, operan2;
+
+    if( pilaDatos.size < 2 ){
+      return false;
+    }
+    else{
+
+      operan1 = pilaDatos.pop();
+      operan2 = pilaDatos.pop();
+
+      pilaDatos.push( operan1 + op + operan2 );
+
+      return true;
+    }
+  }
+
+  private boolean apilarOperando( String operando ){
+
+    if( !operando.equals("(") ){
+      pilaDatos.push(operando);
     }
 
-    pilaDatos.push( operando1 + simboloOperacion + operando2 );
+    return true; 
   }
 
-  private void desapilarOperandos(){
-    operando1 = pilaDatos.pop();
-    operando2 = pilaDatos.pop();
-
+  private boolean validarPorOperadores(){
+    
+    if( pilaDatos.size == 1 ) return true;
+    else return false;
   }
 
-  private void validarOperandos(){
-    if( operando1 == null || operando2 == null ) esValidaPorOperandos = false;
+  private void mostrarMensaje( boolean validOperandos, boolean validOperadores ){
+
+    if( validOperadores && validOperandos ) System.out.println("OK");
+    else if( !validOperandos && validOperadores ) System.out.println("FALTA OPERANDO");
+    else if( validOperandos && !validOperadores ) System.out.println("FALTA OPERADOR");
   }
 
-  private void apilarOperando( String operando ){
-    pilaDatos.push(operando);
+  private void limpiarPila(){
+    pilaDatos.limpiar();
   }
 
   Evaluador(){
-    esValidaPorOperandos = esValidaPorOperadores = true;
     pilaDatos = new Pila();
-    operando1 = operando2 = "";
   }
-
 
 }
 
 class Pila{
-  Nodo tope;
-  int totalDatos;
+  int size;
+  private Nodo tope;
 
-  public void push(String entrada){
-    Nodo nodoEntrada = new Nodo(entrada);
+  public void push( String valor ){
+    Nodo temp = new Nodo(valor);
 
-    if( tope == null )
-      tope = nodoEntrada;
+    if( tope == null ) tope = temp;
     else{
-      nodoEntrada.sig = tope;
-      tope = nodoEntrada;
+      temp.sig = tope;
+      tope = temp;
     }
-    
-    totalDatos++;
+
+    size++;
   }
 
   public String pop(){
-    if( tope == null )
-      return null;
+    Nodo aux;
+
+    if( tope == null ) return null;
     else{
-      Nodo aux = tope;
+      aux = tope;
       tope = tope.sig;
-      totalDatos--;
+      size--;
       return aux.valor;
     }
   }
 
-  public void vaciarPila(){
-    if( tope != null ){
-      while( tope != null ){
-        pop();
-      }
-    }
+  public void limpiar(){
+    tope = null;
+    size = 0;
   }
 
   Pila(){
     tope = null;
-    totalDatos = 0;
+    size = 0;
   }
 }
 
@@ -164,7 +157,8 @@ class Nodo{
   String valor;
   Nodo sig;
 
-  Nodo(String valor){
+  Nodo( String valor ){
     this.valor = valor;
+    sig = null;
   }
 }
