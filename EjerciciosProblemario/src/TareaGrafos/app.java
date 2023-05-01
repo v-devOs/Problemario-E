@@ -6,21 +6,22 @@ public class app {
   public static void main(String[] args) {
     Scanner input = new Scanner(System.in);
     Generador generador = new Generador();
-    String aristaLeido, res = "";
+    String aristaLeido;
+    int res = 0;
 
     try {
 
-      System.out.println("Ingrese un aristas a continuacion");
-
-      while ( !res.equalsIgnoreCase("termino")) {
-          
+      while ( res != 1) {
+        
+        System.out.println("Ingrese un arista");
         aristaLeido = input.nextLine();
 
         generador.apilarArista(aristaLeido);
         generador.validarVertices(aristaLeido);
 
         
-        res = input.nextLine();
+        System.out.println("Desea agregar otro arista?\n 1. No\n 2. Si");
+        res = Integer.parseInt(input.nextLine());
       }
 
       generador.iniciarDependencias();
@@ -159,6 +160,8 @@ class Generador{
 
     System.out.println("\n");
   }
+
+ 
 
 
   Generador(){
