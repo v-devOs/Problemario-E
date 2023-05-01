@@ -6,29 +6,29 @@ public class app {
   public static void main(String[] args) {
     Scanner input = new Scanner(System.in);
     Generador generador = new Generador();
-    String aristaLeido;
-    int res = 0;
+    String aristaLeido, res = "";
 
     try {
 
-      while ( res != 1) {
-        
-        System.out.println("Ingrese un arista");
+      System.out.println("Ingrese un aristas a continuacion");
+
+      while ( !res.equalsIgnoreCase("termino")) {
+          
         aristaLeido = input.nextLine();
 
         generador.apilarArista(aristaLeido);
         generador.validarVertices(aristaLeido);
 
-        generador.iniciarMatriz();
-
-        System.out.println("Desea agregar otro arista?\n 1. No\n 2. Si");
-        res = Integer.parseInt(input.nextLine());
-
+        
+        res = input.nextLine();
       }
 
+      generador.iniciarDependencias();
 
-
+      generador.generarMatriz();
       
+      generador.mostrarMatriz();
+
     } catch (Exception e) {
       input.close();
     }
@@ -41,7 +41,9 @@ class Generador{
   private String aristas;
   private int[][] matriz;
 
-  private int posicionVert1, posicionVert2;
+  private String splitedVertices[];
+  private String splitedAristas[];
+
 
   public void validarVertices( String arista ){
 
@@ -54,40 +56,108 @@ class Generador{
   }
 
   public void apilarArista( String arista ){
-    aristas += " " + arista;
+    if( aristas.length() > 0 ){
+      aristas += " " + arista;
+    }
+    else{
+      aristas += arista;
+    }
   }
 
-  public void iniciarMatriz(){
+  public void iniciarDependencias(){
+
     matriz = new int[vertices.length()][vertices.length()];
+
+    splitedVertices = vertices.split("");
+    splitedAristas = aristas.split(" ");
   }
 
   public void generarMatriz(){
-    String splitedVertices[] = vertices.split("");
-    String splitedAristas[] = aristas.split(" ");
 
-    int indexVert, indexAris;
+    String splitedArista[];
+    int posicionVert1, posicionVert2;
+    int indexAris;
 
     for ( indexAris = 0; indexAris < splitedAristas.length; indexAris++) {
 
+      splitedArista = splitedAristas[indexAris].split("");
+
+      posicionVert1 = obtenerPosicion(splitedArista[0]);
+      posicionVert2 = obtenerPosicion(splitedArista[1]);
+
+      marcarConexiones(posicionVert1, posicionVert2);
     }
-    
   }
 
-  private void obtenerPosiciones( String arista, String[] splitedVertices ){
+  private int obtenerPosicion( String partArista ){
 
-    String splitedArista[] = arista.split("");
+    int index = 0;
+    boolean seEncontroPos = false;
 
-    posicionVert1 = 
-
-  }
-
-  private int obtenerPosicion( String partArista, String[] splitedVertices ){
-
-    int indexVertices;
-
-    for ( indexVertices = 0; indexVertices < splitedVertices.length; indexVertices++) {
+    while ( !seEncontroPos && index < splitedVertices.length ) {
       
+      if( splitedVertices[index].equals(partArista) ){
+        seEncontroPos = true;
+      }
+      else{
+        index++;
+      }
     }
+
+    return index;
+  }
+
+  private void marcarConexiones( int posVert1, int posVert2 ){
+    matriz[posVert1][posVert2] = 1;
+    matriz[posVert2][posVert1] = 1;
+  }
+
+  public void mostrarMatriz(){
+
+    System.out.print("\033[H\033[2J");
+    System.out.flush();
+
+    int indexFila, indexColum;
+
+    llenarMatriz();
+    mostrarVertices();
+
+    for ( indexFila = 0; indexFila < matriz.length; indexFila++) {
+
+      System.out.print(" " + splitedVertices[indexFila]);
+
+      for ( indexColum = 0; indexColum < matriz.length; indexColum++) {
+    
+        System.out.print(" " + matriz[indexFila][indexColum] + " "); 
+      }
+
+      System.out.println("\n");
+    }
+  }
+
+  private void llenarMatriz(){
+
+    for (int i = 0; i < matriz.length; i++) {
+      for (int j = 0; j < matriz.length; j++) {
+        
+        if( matriz[i][j] != 1 ){
+          matriz[i][j] = 0;
+        }
+
+      }
+    }
+  }
+
+  private void mostrarVertices(){
+    int index;
+
+    System.out.print("  ");
+
+    for ( index = 0; index < matriz.length; index++) {
+      System.out.print(" " + splitedVertices[index] + " ");
+    }
+
+    System.out.println("\n");
   }
 
 
