@@ -14,7 +14,7 @@ public class p274 {
 
       while (true) {
 
-        expresion = input.nextLine();
+        expresion = input.nextLine().trim();
         evaluador.evaluarExpresion(expresion.split(" "));
 
       }
@@ -84,7 +84,7 @@ class Evaluador{
 
   private boolean apilarOperando( String operando ){
 
-    if( !operando.equals("(") ){
+    if( !operando.equals("(") && !operando.equals(")") ){
       pilaDatos.push(operando);
     }
 
