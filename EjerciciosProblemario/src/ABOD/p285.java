@@ -22,7 +22,11 @@ public class p285 {
           evaluador.insertarValor(valInsert);
           valInsert = input.nextInt();
         }
+        
+        evaluador.encontrarAlturas();
+        evaluador.limpiarDatos();
       }
+
       
     } catch (Exception e) {
       System.err.println(e.toString());
@@ -36,7 +40,7 @@ public class p285 {
 class Evaluador{
   private Arbol arbol;
   private String alturasNodos;
-  private int indexAltMayor;
+  // private int indexAltMayor;
 
   public void insertarValor( int valor ){
 
@@ -79,7 +83,6 @@ class Evaluador{
       
       if( arrayAltNodos[index] > altMayor ){
         altMayor = arrayAltNodos[index];
-        indexAltMayor = index;
       }
     }
 
@@ -93,13 +96,12 @@ class Evaluador{
 
     for ( index = 0; index < arrayAltNodos.length; index++) {
       
-      if( arrayAltNodos[index] > altMayor && index != indexAltMayor && arrayAltNodos[index] != altMayor){
-
+      if( arrayAltNodos[index] != altMayor && arrayAltNodos[index] > altMenor ){
         altMenor = arrayAltNodos[index];
-        indexAltMayor = index;
         seEncontroAltMenor = true;
       }
     }
+
 
     return validarAltMenor(seEncontroAltMenor, altMenor, altMayor);
   }
@@ -110,14 +112,17 @@ class Evaluador{
   }
 
   private void mostrarAlturas( int altMayor, int altMenor ){
-    System.out.println(altMayor + " " + altMenor);
+    System.out.println(altMenor + " " + altMayor);
+  }
+
+  public void limpiarDatos(){
+    arbol.limpiarArbol();
   }
 
 
   Evaluador(){
     arbol = new Arbol();
     alturasNodos = "";
-    indexAltMayor = 0;
   }
 }
 
@@ -157,8 +162,6 @@ class Arbol{
       else{
         seguidor.izq = temp;
       }
-
-      System.out.println( "Alt Rama: " + altRama + " :" + valor);
 
       return altRama;
     }
