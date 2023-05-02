@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class p285 {
   public static void main(String[] args) {
     Scanner input = new Scanner(System.in);
-    Arbol arbol = new Arbol();
+    Evaluador evaluador = new Evaluador();
 
     int casosPrueba, valInsert, count;
 
@@ -19,7 +19,7 @@ public class p285 {
 
         while (valInsert != 0) {
 
-          arbol.insert(valInsert);
+          evaluador.insertarValor(valInsert);
           valInsert = input.nextInt();
         }
       }
@@ -29,6 +29,27 @@ public class p285 {
       input.close();
     }
     
+  }
+}
+
+
+class Evaluador{
+  private Arbol arbol;
+  private String alturasNodos;
+
+  public void insertarValor( int valor ){
+
+    int alturaNodo = arbol.insert(valor);
+
+    if( alturasNodos.length() > 0 ) alturasNodos += " " + alturaNodo;
+    else alturasNodos += alturaNodo;
+   
+  }
+
+
+  Evaluador(){
+    arbol = new Arbol();
+    alturasNodos = "";
   }
 }
 
