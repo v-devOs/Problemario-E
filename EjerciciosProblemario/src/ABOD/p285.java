@@ -1,13 +1,34 @@
 package ABOD;
 
+import java.util.Scanner;
+
 public class p285 {
   public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
     Arbol arbol = new Arbol();
 
-    arbol.insert(5);
-    arbol.insert(2);
-    arbol.insert(1);
-    arbol.insert(7);
+    int casosPrueba, valInsert, count;
+
+    try {
+
+      casosPrueba = input.nextInt();
+
+      for ( count = 0; count < casosPrueba; count++) {
+        
+        valInsert = input.nextInt();
+
+        while (valInsert != 0) {
+
+          arbol.insert(valInsert);
+          valInsert = input.nextInt();
+        }
+      }
+      
+    } catch (Exception e) {
+      System.err.println(e.toString());
+      input.close();
+    }
+    
   }
 }
 
@@ -48,7 +69,7 @@ class Arbol{
         seguidor.izq = temp;
       }
 
-      System.out.println( "Alt Rama: " + altRama);
+      System.out.println( "Alt Rama: " + altRama + " :" + valor);
 
       return altRama;
     }
