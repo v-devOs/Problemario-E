@@ -39,7 +39,6 @@ public class p285 {
 
 class Evaluador{
   private Arbol arbol;
-  // private int indexAltMayor;
 
   public void insertarValor( int valor ){
     arbol.insert(valor);
@@ -113,7 +112,6 @@ class Evaluador{
     arbol = new Arbol();
   }
 }
-
 
 
 class Arbol{
