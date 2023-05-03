@@ -45,6 +45,15 @@ class Evaluador{
   }
 
   public void encontrarAlturas(){
+
+    if( arbol.raiz.der == null && arbol.raiz.izq == null ){
+      System.out.println("1 0");
+    }
+    else
+      procesarRaizConHijos();
+  }
+
+  private void procesarRaizConHijos(){
     int altsArbol[] = obtenerAlturas();
 
     int altMayor = obtenerAltMayor(altsArbol);
@@ -83,11 +92,11 @@ class Evaluador{
   private int obtenerAltMenor( int altsArbol[], int altMayor ){
 
     boolean seEncontro = false;
-    int index, altMenor = 1;
+    int index, altMenor = altMayor;
 
     for ( index = 0; index < altsArbol.length; index++) {
 
-      if( altsArbol[index] > altMenor && altsArbol[index] != altMayor ){
+      if( altsArbol[index] < altMenor && altsArbol[index] != altMayor ){
         altMenor = altsArbol[index];
         seEncontro = true;
       }
@@ -174,7 +183,7 @@ class Arbol{
   }
 
   public String[] getArrayAlturas(){
-    return alturasRamas.split(" ");
+    return alturasRamas.split(" ");  
   }
 
   public void limpiarArbol(){
