@@ -39,77 +39,19 @@ public class p285 {
 
 class Evaluador{
   private Arbol arbol;
-  private String alturasNodos;
   // private int indexAltMayor;
 
   public void insertarValor( int valor ){
-
-    int alturaNodo = arbol.insert(valor);
-
-    if( alturasNodos.length() > 0 ) alturasNodos += " " + alturaNodo;
-    else alturasNodos += alturaNodo;
-   
+    arbol.insert(valor);
   }
 
   public void encontrarAlturas(){
+    arbol.recorerArbol(arbol.raiz);
+    // int altMayor = 0, altMenor = 0;
 
-    int arrayAltNodos[] = convertirArrayStrings();
-
-    int altMayor = encontrarAlturaMayor(arrayAltNodos);
-    int altMenor = encontrarAlturaMenor(altMayor, arrayAltNodos);
-
-    mostrarAlturas(altMayor, altMenor);
+    // mostrarAlturas(altMayor, altMenor);
   }
 
-  private int[] convertirArrayStrings(){
-
-    String auxAlts[] = alturasNodos.split(" ");
-    int arrayAltNodos[] = new int[ auxAlts.length];
-    int index;
-
-    for ( index = 0; index < auxAlts.length; index++) {
-      
-      arrayAltNodos[index] = Integer.parseInt(auxAlts[index]);
-    }
-
-    return arrayAltNodos;
-  }
-
-  private int encontrarAlturaMayor( int arrayAltNodos[] ){
-
-    int index, altMayor = 1;
-
-    for ( index = 0; index < arrayAltNodos.length; index++) {
-      
-      if( arrayAltNodos[index] > altMayor ){
-        altMayor = arrayAltNodos[index];
-      }
-    }
-
-    return altMayor;
-  }
-
-  private int encontrarAlturaMenor( int altMayor, int arrayAltNodos[] ){
-
-    int index, altMenor = 1;
-    boolean seEncontroAltMenor = false;
-
-    for ( index = 0; index < arrayAltNodos.length; index++) {
-      
-      if( arrayAltNodos[index] != altMayor && arrayAltNodos[index] > altMenor ){
-        altMenor = arrayAltNodos[index];
-        seEncontroAltMenor = true;
-      }
-    }
-
-
-    return validarAltMenor(seEncontroAltMenor, altMenor, altMayor);
-  }
-
-  private int validarAltMenor( boolean seEncontro, int altMenor, int altMayor ){
-    if( seEncontro ) return altMenor;
-    else return altMayor;
-  }
 
   private void mostrarAlturas( int altMayor, int altMenor ){
     System.out.println(altMenor + " " + altMayor);
@@ -122,7 +64,6 @@ class Evaluador{
 
   Evaluador(){
     arbol = new Arbol();
-    alturasNodos = "";
   }
 }
 
@@ -131,13 +72,11 @@ class Evaluador{
 class Arbol{
   Nodo raiz;
 
-  public int insert( int valor ){
+  public void insert( int valor ){
     Nodo temp = new Nodo(valor);
-    int altRama = 1;
 
     if( raiz == null ){
       raiz = temp;
-      return altRama;
     } 
     else{
       Nodo auxBusqueda = raiz;
@@ -152,8 +91,6 @@ class Arbol{
         else{
           auxBusqueda = auxBusqueda.izq;
         }
-
-        altRama++;
       }while( auxBusqueda != null );
       
       if( valor > seguidor.info ){
@@ -162,10 +99,30 @@ class Arbol{
       else{
         seguidor.izq = temp;
       }
+    } 
+  }
 
-      return altRama;
+  int altura = 1;
+
+  public void recorerArbol( Nodo aux ){
+
+
+    if( aux.izq == null && aux.der == null ){
+      System.out.println(altura + " Salida altura" + " " + aux.info);
+      altura--;
     }
-
+    
+    if( aux.izq != null ){
+      altura++;
+      recorerArbol(aux.izq);
+    }
+    
+    
+    if( aux.der != null ){
+      altura++;
+      recorerArbol(aux.der);
+    }
+    
   }
 
   public void limpiarArbol(){
