@@ -109,24 +109,26 @@ class Arbol{
 
     if( aux.izq == null && aux.der == null ){
       System.out.println(altura + " Salida altura" + " " + aux.info);
-      altura--;
     }
-    
+
     if( aux.izq != null ){
       altura++;
       recorerArbol(aux.izq);
     }
-    
-    
+
+    if( aux == raiz ) altura = 1;
+        
     if( aux.der != null ){
       altura++;
       recorerArbol(aux.der);
     }
-    
+
+    altura--;
   }
 
   public void limpiarArbol(){
     raiz = null;
+    altura = 1;
   }
 
   Arbol(){
