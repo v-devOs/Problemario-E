@@ -46,12 +46,60 @@ class Evaluador{
   }
 
   public void encontrarAlturas(){
-    arbol.recorerArbol(arbol.raiz);
-    // int altMayor = 0, altMenor = 0;
+    int altsArbol[] = obtenerAlturas();
 
-    // mostrarAlturas(altMayor, altMenor);
+    int altMayor = obtenerAltMayor(altsArbol);
+    int altMenor = obtenerAltMenor(altsArbol, altMayor);
+
+    mostrarAlturas(altMayor, altMenor);
   }
 
+  private int[] obtenerAlturas(){
+    arbol.recorerArbol(arbol.raiz);
+
+    return parseToIntegerArray(arbol.getArrayAlturas());
+  }
+
+  private int[] parseToIntegerArray( String arrayToParse[] ){
+    int arrayAltRamas[] = new int[arrayToParse.length];
+    int index;
+
+    for ( index = 0; index < arrayToParse.length; index++) {
+      arrayAltRamas[index] = Integer.parseInt( arrayToParse[index] );
+    }
+
+    return arrayAltRamas;
+  }
+
+  private int obtenerAltMayor( int altsArbol[] ){
+    int index, altMayor = 1;
+
+    for ( index = 0; index < altsArbol.length; index++) {
+      if( altsArbol[index] > altMayor ) altMayor = altsArbol[index];
+    }
+
+    return altMayor;
+  }
+
+  private int obtenerAltMenor( int altsArbol[], int altMayor ){
+
+    boolean seEncontro = false;
+    int index, altMenor = 1;
+
+    for ( index = 0; index < altsArbol.length; index++) {
+
+      if( altsArbol[index] > altMenor && altsArbol[index] != altMayor ){
+        altMenor = altsArbol[index];
+        seEncontro = true;
+      }
+    }
+
+    return validarAlturaMenor(altMayor, altMenor, seEncontro);
+  }
+
+  private int validarAlturaMenor( int altMayor, int altMenor, boolean seEncontro ){
+    return seEncontro ? altMenor : altMayor;
+  }
 
   private void mostrarAlturas( int altMayor, int altMenor ){
     System.out.println(altMenor + " " + altMayor);
@@ -60,7 +108,6 @@ class Evaluador{
   public void limpiarDatos(){
     arbol.limpiarArbol();
   }
-
 
   Evaluador(){
     arbol = new Arbol();
@@ -71,6 +118,8 @@ class Evaluador{
 
 class Arbol{
   Nodo raiz;
+  private int altura;
+  private String alturasRamas;
 
   public void insert( int valor ){
     Nodo temp = new Nodo(valor);
@@ -102,21 +151,16 @@ class Arbol{
     } 
   }
 
-  int altura = 1;
-
   public void recorerArbol( Nodo aux ){
 
-
     if( aux.izq == null && aux.der == null ){
-      System.out.println(altura + " Salida altura" + " " + aux.info);
+      insertAltura(altura);
     }
 
     if( aux.izq != null ){
       altura++;
       recorerArbol(aux.izq);
     }
-
-    if( aux == raiz ) altura = 1;
         
     if( aux.der != null ){
       altura++;
@@ -126,13 +170,25 @@ class Arbol{
     altura--;
   }
 
+  private void insertAltura( int altura ){
+    if( alturasRamas.length() > 0) alturasRamas += " " + altura;
+    else alturasRamas += altura;
+  }
+
+  public String[] getArrayAlturas(){
+    return alturasRamas.split(" ");
+  }
+
   public void limpiarArbol(){
     raiz = null;
     altura = 1;
+    alturasRamas = "";
   }
 
   Arbol(){
     raiz  = null;
+    altura = 1;
+    alturasRamas = "";
   }
   
 }
