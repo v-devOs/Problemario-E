@@ -44,6 +44,7 @@ class Validador{
 
 class Cola{
   private Nodo start;
+  int size;
 
   public void in( String palabra ){
 
@@ -55,6 +56,8 @@ class Cola{
       aux = buscarPosicion();
       aux.sig = temp;
     }
+
+    size++;
   }
 
   private Nodo buscarPosicion(){
@@ -67,8 +70,27 @@ class Cola{
     return auxBusqueda;
   }
 
+  public Nodo out(){
+    Nodo salida;
+
+    if( start == null ) return null;
+    else{
+      salida = start.sig;
+      start = start.sig;
+      size--;
+
+      return salida;
+    }
+  }
+
+
+  public void limpiarCola(){
+    start = null;
+  }
+
   Cola(){
     start = null;
+    size = 0;
   }
 }
 
