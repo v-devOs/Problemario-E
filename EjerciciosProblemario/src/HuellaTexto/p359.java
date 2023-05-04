@@ -43,7 +43,33 @@ class Validador{
 }
 
 class Cola{
+  private Nodo start;
 
+  public void in( String palabra ){
+
+    Nodo temp = new Nodo(palabra);
+    Nodo aux;
+
+    if( start == null ) start = temp;
+    else{
+      aux = buscarPosicion();
+      aux.sig = temp;
+    }
+  }
+
+  private Nodo buscarPosicion(){
+    Nodo auxBusqueda = start;
+
+    while ( auxBusqueda.sig != null ) {
+      auxBusqueda = auxBusqueda.sig;
+    }
+
+    return auxBusqueda;
+  }
+
+  Cola(){
+    start = null;
+  }
 }
 
 class Nodo{
