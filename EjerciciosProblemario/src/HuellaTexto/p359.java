@@ -9,6 +9,7 @@ public class p359 {
     Scanner archivo;
     String nombreArchivo;
 
+  
     try {
 
       nombreArchivo = input.nextLine();
@@ -33,13 +34,35 @@ public class p359 {
 class Evaluador extends Validador{
   private int totalPalabras;
 
+  public void ejemplo(){
+    
+  }
+
 
 
 
 }
 
-class Validador{
+class Validador extends Conectores{
+  String preposiciones, articulos, simbConteo;
 
+
+  Validador(){
+    preposiciones = "a ante bajo cabe con contra de desde durante en entre hacia hasta mediante para por según sin so sobre tras versus vía";
+    articulos = "el la los las lo un una unos unas";
+  }
+}
+
+class Conectores{
+  String adicion, causalidad, condicionales, consecuencia, finalidad;
+
+  Conectores(){
+    adicion = "";
+    causalidad = "";
+    condicionales = "";
+    consecuencia = "";
+    finalidad = "";
+  }
 }
 
 class Cola{
