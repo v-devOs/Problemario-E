@@ -19,10 +19,9 @@ public class p300 {
 
         for ( col = 0; col < matriz.length; col++) {
 
-          matriz[fila][col] = input.nextInt();
+          matriz[fila][col] = Integer.parseInt(input.nextLine());
         }
       }
-
 
       while (true) {
         conjVertices = input.nextLine();
@@ -30,11 +29,9 @@ public class p300 {
 
         grafo.procesarVertices(conjVertices);
       }
-
-      
+    
     } catch (Exception e) {
-      System.err.println(e.toString());
-      input.close();// TODO: handle exception
+      input.close();
     }
   }
 }
@@ -44,18 +41,16 @@ class Grafo{
   private int matriz[][];
   private int vertGrafo[];
 
-
   public void procesarVertices( String conjVert ){
 
-    System.out.println("Llegue a procesar");
-
     boolean hayCamino = true;
-    int indexActual, indexBuscar, indexAux = 0;
+    int indexActual = 0, indexBuscar, indexAux = 0;
 
-    indexActual = vertGrafo[indexAux];
-    indexBuscar = vertGrafo[indexAux + 1];
-
+    
     while ( hayCamino && indexAux < vertGrafo.length - 1 ){
+
+      indexActual = vertGrafo[indexAux];
+      indexBuscar = vertGrafo[indexAux + 1];
       
       if( matriz[indexActual][indexBuscar] == 1 ){
         indexActual = indexBuscar;
@@ -67,14 +62,16 @@ class Grafo{
     }
 
     if( hayCamino ){
-      System.out.println("Si hay ruta");
+      System.out.println(validarCamino(indexActual, vertGrafo[0]));
     }
     else{
       System.out.println("NO SUBGRAFO");
     }
   }
 
-  
+  private String validarCamino( int indexActual, int indexBuscar ){
+    return matriz[indexActual][indexBuscar] == 1 ? "CIRCUITO" : "CAMINO";
+  }
 
   Grafo( int[][] matriz, String conjVert ){
     this.matriz = matriz;
@@ -82,8 +79,6 @@ class Grafo{
   }
 
   private int[] obtenerIndexVert( String conjVert ){
-
-    System.out.println("llegue");
 
     String auxVerts[] = conjVert.split(" ");
     int indexVerts[] = new int[auxVerts.length];
@@ -94,8 +89,6 @@ class Grafo{
 
       indexVerts[index] = (int) auxVerts[index].charAt(0) - 65;
     }
-
-    System.out.println("Sali");
 
     return indexVerts;
   }
