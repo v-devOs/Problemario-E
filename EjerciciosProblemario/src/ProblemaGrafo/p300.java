@@ -19,7 +19,7 @@ public class p300 {
 
         for ( col = 0; col < matriz.length; col++) {
 
-          matriz[fila][col] = Integer.parseInt(input.nextLine());
+          matriz[fila][col] = input.nextInt();
         }
       }
 
@@ -27,12 +27,13 @@ public class p300 {
       while (true) {
         conjVertices = input.nextLine();
         grafo = new Grafo(matriz, conjVertices);
-        
+
         grafo.procesarVertices(conjVertices);
       }
 
       
     } catch (Exception e) {
+      System.err.println(e.toString());
       input.close();// TODO: handle exception
     }
   }
@@ -45,6 +46,8 @@ class Grafo{
 
 
   public void procesarVertices( String conjVert ){
+
+    System.out.println("Llegue a procesar");
 
     boolean hayCamino = true;
     int indexActual, indexBuscar, indexAux = 0;
@@ -80,6 +83,8 @@ class Grafo{
 
   private int[] obtenerIndexVert( String conjVert ){
 
+    System.out.println("llegue");
+
     String auxVerts[] = conjVert.split(" ");
     int indexVerts[] = new int[auxVerts.length];
 
@@ -87,8 +92,10 @@ class Grafo{
 
     for ( index = 0; index < auxVerts.length; index++) {
 
-      indexVerts[index] = (int) auxVerts[index].charAt(index);
+      indexVerts[index] = (int) auxVerts[index].charAt(0) - 65;
     }
+
+    System.out.println("Sali");
 
     return indexVerts;
   }
