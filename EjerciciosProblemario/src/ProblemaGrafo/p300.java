@@ -62,16 +62,13 @@ class Grafo{
   public void procesarVertices( String conjVert ){
 
     boolean hayCamino = true;
-    int indexActual = 0, indexBuscar, indexAux = 0, limit = 1;
+    int indexActual, indexBuscar, indexAux = 0, limit = 1;
 
-    if( vertGrafo[0] == vertGrafo[vertGrafo.length - 1] ) limit = 2;
-
+    indexActual = vertGrafo[indexAux];
+    indexBuscar = vertGrafo[++indexAux];
 
     while ( hayCamino && indexAux < vertGrafo.length - limit ){
 
-      indexActual = vertGrafo[indexAux];
-      indexBuscar = vertGrafo[indexAux + 1];
-      
       if( matriz[indexActual][indexBuscar] == 1 ){
         indexActual = indexBuscar;
         indexBuscar = vertGrafo[++indexAux];
@@ -82,7 +79,7 @@ class Grafo{
     }
 
     if( hayCamino ){
-      System.out.println(validarRuta(indexActual , vertGrafo[0]));
+      System.out.println(validarRuta(indexActual , vertGrafo[indexAux]));
     }
     else{
       System.out.println("NO SUBGRAFO");
@@ -90,14 +87,16 @@ class Grafo{
   }
 
   private String validarRuta( int indexActual, int indexBuscar ){
-    
-    if( vertGrafo[0] == vertGrafo[ vertGrafo.length -1 ] ){
+        
+    if( vertGrafo[0] == vertGrafo[ vertGrafo.length - 1 ] ){
       return validarCircuito(indexActual, indexBuscar);
     }
-    else{
-      return "Camino";
+    else if ( matriz[indexActual][indexBuscar] == 1 ){
+      return "CAMINO";
     }
-    // return matriz[indexActual][indexBuscar] == 1 ? "CIRCUITO" : "CAMINO";
+    else{
+      return "NO SUBGRAFO";
+    }
   }
 
   private String validarCircuito( int indexActual, int indexBuscar){
