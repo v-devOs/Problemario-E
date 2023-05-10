@@ -27,10 +27,11 @@ public class p300 {
         conjVertices = input.nextLine();
 
         grafo.setVertGrafo(conjVertices);
-        grafo.procesarVertices(conjVertices);
+        grafo.procesarVertices();
       }
     
     } catch (Exception e) {
+      System.err.println(e.toString());
       input.close();
     }
   }
@@ -59,48 +60,39 @@ class Grafo{
     vertGrafo = obtenerIndexVert(conjVert);
   }
 
-  public void procesarVertices( String conjVert ){
+  public void procesarVertices(){
 
-    boolean hayCamino = true;
-    int indexActual, indexBuscar, indexAux = 0, limit = 1;
+    boolean hayRuta = true;
+    int indexAux = 0, indexActual = vertGrafo[indexAux], indexBuscar = vertGrafo[++indexAux];
 
-    indexActual = vertGrafo[indexAux];
-    indexBuscar = vertGrafo[++indexAux];
-
-    while ( hayCamino && indexAux < vertGrafo.length - limit ){
-
-      if( matriz[indexActual][indexBuscar] == 1 ){
+    while (hayRuta && indexAux < vertGrafo.length - 1) {
+      
+      if( matriz[indexActual][indexBuscar] >= 1 ){
         indexActual = indexBuscar;
         indexBuscar = vertGrafo[++indexAux];
       }
       else{
-        hayCamino = false;
+        hayRuta = false;
       }
     }
 
-    if( hayCamino ){
-      System.out.println(validarRuta(indexActual , vertGrafo[indexAux]));
+    if( !hayRuta ){
+      System.out.println("NO SUBGRAFO");
     }
     else{
-      System.out.println("NO SUBGRAFO");
+      System.out.println(validarRuta(indexActual, indexBuscar));
     }
   }
 
   private String validarRuta( int indexActual, int indexBuscar ){
-        
-    if( vertGrafo[0] == vertGrafo[ vertGrafo.length - 1 ] ){
-      return validarCircuito(indexActual, indexBuscar);
+    
+    if( matriz[indexActual][indexBuscar] >= 1 && vertGrafo[0] == indexBuscar){
+      return "CIRCUITO";
     }
-    else if ( matriz[indexActual][indexBuscar] == 1 ){
-      return "CAMINO";
-    }
-    else{
-      return "NO SUBGRAFO";
-    }
-  }
-
-  private String validarCircuito( int indexActual, int indexBuscar){
-    return matriz[indexActual][indexBuscar] == 1 ? "CIRCUITO" : "NO SUBGRAFO";
+    else if( matriz[indexActual][indexBuscar] >= 1 ) return "CAMINO";
+    else return "NO SUBGRAFO";
+    
+    
   }
 
   private int[] obtenerIndexVert( String conjVert ){
