@@ -94,12 +94,48 @@ class Procesador{
         index++;
       }
     }
-
     return index;
   }
 
   private void marcarConexiones( int posVert1, int posVert2 ){
     matriz[posVert1][posVert2] = 1;
   }
-  
+
+  private String mostrarInfoTipoGradoGrafo(){
+    String tipo = determinarTipo();
+
+    return tipo;
+  }
+
+  private String determinarTipo(){
+    
+    boolean esGrafo = true;
+    int col = 0, fila = 0;
+
+    while ( esGrafo && fila < matriz.length) {
+
+      col = 0;
+      
+      while ( esGrafo && col < matriz.length ) {
+
+        if( col == fila ){
+          esGrafo = validarDiagonalPrincipal(fila, col);
+        }
+        else{
+          esGrafo = validarCasillas(fila, col);
+        }
+        col++;
+      }
+      fila++;
+    }
+    return esGrafo ? "GRAFO" : "DIGRAFO";
+  }
+
+  private boolean validarDiagonalPrincipal( int fila, int col ){
+    return matriz[fila][col] == 0;
+  }
+
+  private boolean validarCasillas( int fila, int col ){
+    return matriz[fila][col] == matriz[col][fila];
+  }
 }
