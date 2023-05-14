@@ -101,7 +101,7 @@ class Procesador{
     matriz[posVert1][posVert2] = 1;
   }
 
-  private String mostrarInfoTipoGradoGrafo(){
+  public String mostrarInfoTipoGradoGrafo(){
     String tipo = determinarTipo();
 
     return tipo;
@@ -137,5 +137,20 @@ class Procesador{
 
   private boolean validarCasillas( int fila, int col ){
     return matriz[fila][col] == matriz[col][fila];
+  }
+
+  private void calcularGradoVerts(){
+    String vertsMaxGrado = "";
+    int vertMaxGrado = 0, col, fila, auxGradoVert;
+
+    for ( col = 0; col < matriz.length; col++) {
+
+      auxGradoVert = 0;
+
+      for ( fila = 0; fila < matriz.length; fila++) {
+        if( matriz[fila][col] == 1 ) auxGradoVert++;
+      }
+    }
+
   }
 }
