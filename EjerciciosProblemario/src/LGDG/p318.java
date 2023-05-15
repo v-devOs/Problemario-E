@@ -18,6 +18,7 @@ public class p318 {
         aristas = input.nextLine();
         procesador.iniciarDependencias(vertices, aristas);
         procesador.generarMatriz();
+        System.out.println(procesador.mostrarInfoTipoGradoGrafo());
       }
       
     } catch (Exception e) {
@@ -58,8 +59,6 @@ class Procesador{
   }
 
   public void generarMatriz(){
-
-    System.out.println(aristas.length);
 
     String splitedArista[];
     int posicionVert1, posicionVert2;
@@ -102,9 +101,7 @@ class Procesador{
   }
 
   public String mostrarInfoTipoGradoGrafo(){
-    String tipo = determinarTipo();
-
-    return tipo;
+    return determinarTipo() + calcularGradoVerts();
   }
 
   private String determinarTipo(){
@@ -128,7 +125,7 @@ class Procesador{
       }
       fila++;
     }
-    return esGrafo ? "GRAFO" : "DIGRAFO";
+    return esGrafo ? "Grafo " : "Digrafo ";
   }
 
   private boolean validarDiagonalPrincipal( int fila, int col ){
@@ -139,18 +136,65 @@ class Procesador{
     return matriz[fila][col] == matriz[col][fila];
   }
 
-  private void calcularGradoVerts(){
-    String vertsMaxGrado = "";
-    int vertMaxGrado = 0, col, fila, auxGradoVert;
+  private String calcularGradoVerts(){
+    int[] indexVertsGradoMax = new int[matriz.length];
+    int index = 0, totalVertMax = 0;
 
-    for ( col = 0; col < matriz.length; col++) {
+    int maxGrado = 0, col, fila, auxGradoVert;
+
+    for ( fila = 0; fila < matriz.length; fila++) {
 
       auxGradoVert = 0;
 
-      for ( fila = 0; fila < matriz.length; fila++) {
-        if( matriz[fila][col] == 1 ) auxGradoVert++;
+      for ( col = 0; col < matriz.length; col++) {
+        
+        if( matriz[fila][col] > 0) auxGradoVert++;
+      }
+
+      if( auxGradoVert > maxGrado ){
+        index = 0;
+        totalVertMax = 0;
+        indexVertsGradoMax[index] = fila;
+        maxGrado = auxGradoVert;
+        totalVertMax++;
+        index++;
+      }
+      else if( auxGradoVert == maxGrado ){
+        indexVertsGradoMax[index] = fila;
+        index++;
+        totalVertMax++;
       }
     }
+
+    return "Grado " + maxGrado + " VMayor " + buscarVertGradoMax(totalVertMax, indexVertsGradoMax);
+
+  }
+
+  private String buscarVertGradoMax( int totalVertMax, int[] indexVertsGradoMax ){
+
+    String vertMaxGrado = "";
+    int indexVertGrado, indexVert = 0;
+    boolean seEncontroVert;
+
+    for ( indexVertGrado = 0; indexVertGrado < totalVertMax; indexVertGrado++) {
+
+      seEncontroVert = false;
+      indexVert = 0;
+      
+      while ( !seEncontroVert  && indexVert < vertices.length ) {
+        
+        if( indexVert == indexVertsGradoMax[indexVertGrado] ){
+
+          if( vertMaxGrado.length() == 0) vertMaxGrado += vertices[indexVert];
+          else vertMaxGrado += " " + vertices[indexVert];
+          seEncontroVert = true;
+        }
+
+        indexVert++;
+      }
+    }
+
+    return "[" + vertMaxGrado + "]";
 
   }
 }
