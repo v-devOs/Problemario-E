@@ -20,11 +20,9 @@ public class p318 {
         procesador.iniciarDependencias(vertices, aristas);
         hayDatosErroneos = procesador.generarMatriz();
         System.out.println(procesador.mostrarInfoTipoGradoGrafo( hayDatosErroneos ));
-        // procesador.limpiar();
       }
       
     } catch (Exception e) {
-      System.err.println(e.toString());
       input.close();
     }
   }
@@ -145,7 +143,6 @@ class Procesador{
     while ( esGrafo && fila < matriz.length) {
 
       col = 0;
-      
       while ( esGrafo && col < matriz.length ) {
 
         if( col == fila ){
@@ -170,9 +167,9 @@ class Procesador{
   }
 
   private String calcularGradoVerts(){
+
     int[] indexVertsGradoMax = new int[matriz.length];
     int index = 0, totalVertMax = 0;
-
     int maxGrado = 0, col, fila, auxGradoVert;
 
     for ( fila = 0; fila < matriz.length; fila++) {
@@ -200,7 +197,6 @@ class Procesador{
     }
 
     return "Grado " + maxGrado + " VMayor " + buscarVertGradoMax(totalVertMax, indexVertsGradoMax);
-
   }
 
   private String buscarVertGradoMax( int totalVertMax, int[] indexVertsGradoMax ){
@@ -230,15 +226,7 @@ class Procesador{
     return "[" + vertMaxGrado + "]";
   }
 
-  public void limpiar(){
-    matriz = null;
-    vertices = null;
-    aristas = null;
-    // noHayDatosErroneos = true;
-  }
-
   Procesador(){
-    // noHayDatosErroneos = true;
     auxVertices = "";
   }
 }
