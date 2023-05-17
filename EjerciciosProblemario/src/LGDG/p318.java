@@ -19,6 +19,7 @@ public class p318 {
         procesador.iniciarDependencias(vertices, aristas);
         procesador.generarMatriz();
         System.out.println(procesador.mostrarInfoTipoGradoGrafo());
+        procesador.limpiar();
       }
       
     } catch (Exception e) {
@@ -31,6 +32,7 @@ public class p318 {
 class Procesador{
   private String[] vertices;
   private String[] aristas;
+  private boolean noHayDatosErroneos;
 
   private int[][] matriz;
 
@@ -62,17 +64,42 @@ class Procesador{
 
     String splitedArista[];
     int posicionVert1, posicionVert2;
-    int indexAris;
+    int indexAris = 0;
 
-    for ( indexAris = 0; indexAris < aristas.length; indexAris++) {
+    while( indexAris < aristas.length && noHayDatosErroneos ){
 
       splitedArista = limpiarCadena(aristas[indexAris], true).split(",");
 
-      posicionVert1 = obtenerPosicion(splitedArista[0]);
-      posicionVert2 = obtenerPosicion(validarUltiPartVert(splitedArista[1], indexAris));
+      validarPartVer(splitedArista[0]);
+      validarPartVer(splitedArista[1]);
 
-      marcarConexiones(posicionVert1, posicionVert2);
+      if( noHayDatosErroneos ){
+        posicionVert1 = obtenerPosicion(splitedArista[0]);
+        posicionVert2 = obtenerPosicion(validarUltiPartVert(splitedArista[1], indexAris));
+  
+        marcarConexiones(posicionVert1, posicionVert2);
+      }
+      
+
+      indexAris++;
     }
+  }
+
+  private void validarPartVer( String partVert ){
+    int index = 0;
+    boolean seEncontroVert = false;
+
+    while ( !seEncontroVert && index < vertices.length ) {  
+      if(  !vertices[index].equals(partVert) ){
+        index++;
+      } 
+      else{
+        seEncontroVert = true;
+      }
+
+    }
+
+    noHayDatosErroneos = seEncontroVert;
   }
 
   private String validarUltiPartVert( String partVert, int index  ){
@@ -101,7 +128,7 @@ class Procesador{
   }
 
   public String mostrarInfoTipoGradoGrafo(){
-    return determinarTipo() + calcularGradoVerts();
+    return noHayDatosErroneos ? determinarTipo() + calcularGradoVerts(): "DATOS ERRONEOS";
   }
 
   private String determinarTipo(){
@@ -195,6 +222,16 @@ class Procesador{
     }
 
     return "[" + vertMaxGrado + "]";
+  }
 
+  public void limpiar(){
+    matriz = null;
+    vertices = null;
+    aristas = null;
+    noHayDatosErroneos = true;
+  }
+
+  Procesador(){
+    noHayDatosErroneos = true;
   }
 }
