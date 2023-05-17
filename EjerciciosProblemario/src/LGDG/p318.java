@@ -6,6 +6,7 @@ public class p318 {
   public static void main(String[] args) {
     Procesador procesador = new Procesador();
     Scanner input = new Scanner(System.in);
+    boolean hayDatosErroneos;
     int casos, count;
     String vertices, aristas;
     
@@ -17,9 +18,9 @@ public class p318 {
         vertices = input.nextLine();
         aristas = input.nextLine();
         procesador.iniciarDependencias(vertices, aristas);
-        procesador.generarMatriz();
-        System.out.println(procesador.mostrarInfoTipoGradoGrafo());
-        procesador.limpiar();
+        hayDatosErroneos = procesador.generarMatriz();
+        System.out.println(procesador.mostrarInfoTipoGradoGrafo( hayDatosErroneos ));
+        // procesador.limpiar();
       }
       
     } catch (Exception e) {
@@ -32,7 +33,6 @@ public class p318 {
 class Procesador{
   private String[] vertices;
   private String[] aristas;
-  private boolean noHayDatosErroneos;
   private String auxVertices;
 
   private int[][] matriz;
@@ -42,7 +42,6 @@ class Procesador{
     iniciarArrArist(aristCaso);
 
     matriz = new int[vertices.length][vertices.length];
-
   }
 
   private void inicarArrVert( String vertCaso ){
@@ -52,7 +51,6 @@ class Procesador{
     for ( index = 0; index < vertices.length; index++) {
       auxVertices += " " + vertices[index];
     }
-    
   }
 
   private void iniciarArrArist( String aristCaso ){
@@ -67,39 +65,51 @@ class Procesador{
       return verCaso.substring(1, verCaso.length() - 1);
   }
 
-  public void generarMatriz(){
+  public boolean generarMatriz(){
 
     String splitedArista[];
+    boolean hayDatosErroneos = false;
     int posicionVert1, posicionVert2;
     int indexAris = 0;
 
-    while( indexAris < aristas.length && noHayDatosErroneos ){
+    while( indexAris < aristas.length && !hayDatosErroneos ){
 
       splitedArista = limpiarCadena(aristas[indexAris], true).split(",");
 
-      validarPartVer(splitedArista[0]);
-      validarPartVer(splitedArista[1]);
+      hayDatosErroneos = validarVert(splitedArista, hayDatosErroneos);
 
-      if( noHayDatosErroneos ){
-        posicionVert1 = obtenerPosicion(splitedArista[0]);
-        posicionVert2 = obtenerPosicion(validarUltiPartVert(splitedArista[1], indexAris));
+      if( !hayDatosErroneos ){
+        posicionVert1 = obtenerPosicion(limpiarPartVert(splitedArista[0]));
+        posicionVert2 = obtenerPosicion(limpiarPartVert(splitedArista[1]));
   
         marcarConexiones(posicionVert1, posicionVert2);
+
+        indexAris++;
       }
-    
-      indexAris++;
     }
+    return hayDatosErroneos;
   }
 
-  private void validarPartVer( String partVert ){
+  private boolean validarVert( String[] vert, boolean hayDatosErroneos ){
 
-    System.out.println(auxVertices);
-    
-    if( !auxVertices.contains(partVert)) noHayDatosErroneos = false;
+    int index = 0;
+    String auxPartVert;
+
+    while (!hayDatosErroneos && index < vert.length) {
+
+      auxPartVert = limpiarPartVert(vert[index]);
+
+      if( !auxVertices.contains(auxPartVert) ){
+        hayDatosErroneos = true;
+      }
+      index++;
+    }
+
+    return hayDatosErroneos;
   }
 
-  private String validarUltiPartVert( String partVert, int index  ){
-    return index == aristas.length - 1 ? partVert.substring(0, partVert.length() - 1) : partVert;
+  private String limpiarPartVert( String partVert ){
+    return partVert.contains(")") ? partVert.substring(0, partVert.length() - 1) : partVert;
   }
 
   private int obtenerPosicion( String partArista ){
@@ -123,8 +133,8 @@ class Procesador{
     matriz[posVert1][posVert2] = 1;
   }
 
-  public String mostrarInfoTipoGradoGrafo(){
-    return noHayDatosErroneos ? determinarTipo() + calcularGradoVerts() : "DATOS ERRONEOS";
+  public String mostrarInfoTipoGradoGrafo( boolean hayDatosErroneos){
+    return hayDatosErroneos ? "DATOS ERRONEOS" : determinarTipo() + calcularGradoVerts();
   }
 
   private String determinarTipo(){
@@ -224,11 +234,11 @@ class Procesador{
     matriz = null;
     vertices = null;
     aristas = null;
-    noHayDatosErroneos = true;
+    // noHayDatosErroneos = true;
   }
 
   Procesador(){
-    noHayDatosErroneos = true;
+    // noHayDatosErroneos = true;
     auxVertices = "";
   }
 }
