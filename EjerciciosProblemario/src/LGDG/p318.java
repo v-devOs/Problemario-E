@@ -33,6 +33,7 @@ class Procesador{
   private String[] vertices;
   private String[] aristas;
   private boolean noHayDatosErroneos;
+  private String auxVertices;
 
   private int[][] matriz;
 
@@ -45,7 +46,13 @@ class Procesador{
   }
 
   private void inicarArrVert( String vertCaso ){
+    int index;
     vertices = limpiarCadena(vertCaso, false).split(",");
+
+    for ( index = 0; index < vertices.length; index++) {
+      auxVertices += " " + vertices[index];
+    }
+    
   }
 
   private void iniciarArrArist( String aristCaso ){
@@ -79,27 +86,16 @@ class Procesador{
   
         marcarConexiones(posicionVert1, posicionVert2);
       }
-      
-
+    
       indexAris++;
     }
   }
 
   private void validarPartVer( String partVert ){
-    int index = 0;
-    boolean seEncontroVert = false;
 
-    while ( !seEncontroVert && index < vertices.length ) {  
-      if(  !vertices[index].equals(partVert) ){
-        index++;
-      } 
-      else{
-        seEncontroVert = true;
-      }
-
-    }
-
-    noHayDatosErroneos = seEncontroVert;
+    System.out.println(auxVertices);
+    
+    if( !auxVertices.contains(partVert)) noHayDatosErroneos = false;
   }
 
   private String validarUltiPartVert( String partVert, int index  ){
@@ -128,7 +124,7 @@ class Procesador{
   }
 
   public String mostrarInfoTipoGradoGrafo(){
-    return noHayDatosErroneos ? determinarTipo() + calcularGradoVerts(): "DATOS ERRONEOS";
+    return noHayDatosErroneos ? determinarTipo() + calcularGradoVerts() : "DATOS ERRONEOS";
   }
 
   private String determinarTipo(){
@@ -233,5 +229,6 @@ class Procesador{
 
   Procesador(){
     noHayDatosErroneos = true;
+    auxVertices = "";
   }
 }
