@@ -136,7 +136,17 @@ class Procesador{
   }
 
   private String determinarTipo(){
-    
+
+    if( vertices.length == 1 ){
+      return "Grafo ";
+    }
+    else{
+      return determinarTipoGrafo();
+    } 
+  }
+
+  private String determinarTipoGrafo(){
+
     boolean esGrafo = true;
     int col = 0, fila = 0;
 
@@ -230,3 +240,4 @@ class Procesador{
     auxVertices = "";
   }
 }
+
