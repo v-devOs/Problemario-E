@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class p318 {
   public static void main(String[] args) {
-    Procesador procesador = new Procesador();
+    Procesador procesador;
     Scanner input = new Scanner(System.in);
     boolean hayDatosErroneos;
     int casos, count;
@@ -17,7 +17,9 @@ public class p318 {
       for ( count = 0; count < casos; count++) {
         vertices = input.nextLine();
         aristas = input.nextLine();
-        procesador.iniciarDependencias(vertices, aristas);
+
+        procesador = new Procesador(vertices, aristas);
+        // procesador.iniciarDependencias(vertices, aristas);
         hayDatosErroneos = procesador.generarMatriz();
         System.out.println(procesador.mostrarInfoTipoGradoGrafo( hayDatosErroneos ));
       }
@@ -35,25 +37,14 @@ class Procesador{
 
   private int[][] matriz;
 
-  public void iniciarDependencias( String vertCaso, String aristCaso ){
-    inicarArrVert(vertCaso);
-    iniciarArrArist(aristCaso);
+  // public void iniciarDependencias( String vertCaso, String aristCaso ){
+  //   inicarArrVert(vertCaso);
+  //   iniciarArrArist(aristCaso);
 
-    matriz = new int[vertices.length][vertices.length];
-  }
+  //   matriz = new int[vertices.length][vertices.length];
+  // }
 
-  private void inicarArrVert( String vertCaso ){
-    int index;
-    vertices = limpiarCadena(vertCaso, false).split(",");
-
-    for ( index = 0; index < vertices.length; index++) {
-      auxVertices += " " + vertices[index];
-    }
-  }
-
-  private void iniciarArrArist( String aristCaso ){
-    aristas = limpiarCadena(aristCaso, false).split("\\),");
-  }
+  
 
   private String limpiarCadena( String verCaso, boolean esAristas ){
     
@@ -236,8 +227,30 @@ class Procesador{
     return "[" + vertMaxGrado + "]";
   }
 
-  Procesador(){
-    auxVertices = "";
+  Procesador(String vertices, String aristas){
+    this.vertices = inicarArrVert(vertices);
+    this.aristas = iniciarArrArist(aristas);
+    this.auxVertices = iniciarAuxVertices(); 
+    this.matriz = new int[this.vertices.length][this.vertices.length];    
+  }
+
+  private String[] inicarArrVert( String vertCaso ){
+    return limpiarCadena(vertCaso, false).split(",");
+  }
+
+  private String iniciarAuxVertices(){
+    int index;
+    String auxVertices = "";
+
+    for ( index = 0; index < this.vertices.length; index++) {
+      auxVertices += " " + vertices[index];
+    }
+
+    return auxVertices;
+  }
+
+  private String[] iniciarArrArist( String aristCaso ){
+    return limpiarCadena(aristCaso, false).split("\\),");
   }
 }
 
