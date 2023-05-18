@@ -19,7 +19,6 @@ public class p318 {
         aristas = input.nextLine();
 
         procesador = new Procesador(vertices, aristas);
-        // procesador.iniciarDependencias(vertices, aristas);
         hayDatosErroneos = procesador.generarMatriz();
         System.out.println(procesador.mostrarInfoTipoGradoGrafo( hayDatosErroneos ));
       }
@@ -34,21 +33,11 @@ class Procesador{
   private String[] vertices;
   private String[] aristas;
   private String auxVertices;
-
   private int[][] matriz;
 
-  // public void iniciarDependencias( String vertCaso, String aristCaso ){
-  //   inicarArrVert(vertCaso);
-  //   iniciarArrArist(aristCaso);
-
-  //   matriz = new int[vertices.length][vertices.length];
-  // }
-
-  
-
-  private String limpiarCadena( String verCaso, boolean esAristas ){
+  private String limpiarCadena( String verCaso, boolean esArista ){
     
-    if( esAristas ) 
+    if( esArista ) 
       return verCaso.substring(1);
     else
       return verCaso.substring(1, verCaso.length() - 1);
