@@ -36,9 +36,17 @@ class Organizador{
 
   public int procesarLlaves(){
 
-    int tColisiones = procesarArrLlaves();
+    float tColisiones = procesarArrLlaves();
 
-    return (tColisiones/ arrLlaves.length) * 100;
+    tColisiones = tColisiones / arrLlaves.length * 100;
+
+    return limparResultadoColisiones(tColisiones);
+  }
+
+  private int limparResultadoColisiones( float tColisiones ){
+    String auxCol = String.valueOf(tColisiones);
+
+    return Integer.parseInt(auxCol.split("\\.")[0]);
   }
 
   private int procesarArrLlaves(){
@@ -57,6 +65,7 @@ class Organizador{
 
       tColisiones += validarDirLLave(dirLlave, arrLlaves[index]);
     }
+
 
     return tColisiones;
   }
