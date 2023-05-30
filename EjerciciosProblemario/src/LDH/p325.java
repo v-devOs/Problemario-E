@@ -24,6 +24,7 @@ public class p325 {
 
 
     } catch (Exception e) {
+      System.out.println(e.toString());
       input.close();
     }
     
@@ -31,7 +32,7 @@ public class p325 {
 }
 
 class Organizador{
-  private Hashtable<Integer, String> map;
+  private Hashtable<Long, String> map;
   private String[] arrLlaves;
 
   public int procesarLlaves(){
@@ -52,7 +53,7 @@ class Organizador{
   private int procesarArrLlaves(){
 
     int index, tColisiones = 0;
-    Integer dirLlave;
+    Long dirLlave;
     String[] arrLlave;
     String valAsciiLlave;
 
@@ -82,26 +83,28 @@ class Organizador{
     return valAscii;
   }
 
-  private Integer procesarValAsciiLlave( String valAscii, int tDatos ){
+  private Long procesarValAsciiLlave( String valAscii, int tDatos ){
 
-    int partLlave1 = Integer.parseInt(valAscii.substring(0, valAscii.length()/2));
-    int partLlave2 = Integer.parseInt(valAscii.substring((valAscii.length()/2)));
+    Long partLlave1 = Long.parseLong(valAscii.substring(0, valAscii.length()/2));
+    Long partLlave2 = Long.parseLong(valAscii.substring((valAscii.length()/2)));
 
-    Integer key = (partLlave1 + partLlave2 ) % tDatos;
+    Long key = (partLlave1 + partLlave2 ) % tDatos;
     return key;
   }
 
-  private int validarDirLLave( Integer dirLlave, String llave ){
+  private int validarDirLLave( Long dirLlave, String llave ){
 
     if( !map.containsKey(dirLlave) ){
       map.put(dirLlave, llave);
       return 0;
     }
-    else{
+    else if ( !map.containsValue(llave)){
       return 1;
     }
+    else{
+      return 0;
+    }
   }
-
 
   Organizador(String llaves){
     map = new Hashtable<>();
